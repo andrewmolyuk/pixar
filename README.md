@@ -2,6 +2,7 @@
 
 ![GitHub Actions](https://github.com/andrewmolyuk/go-photos/actions/workflows/ci.yml/badge.svg)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/a2731a9c8e33458baea3e9ad9c362d8c)](https://www.codacy.com/gh/andrewmolyuk/go-photos/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=andrewmolyuk/go-photos&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/a2731a9c8e33458baea3e9ad9c362d8c)](https://www.codacy.com/gh/andrewmolyuk/go-photos/dashboard?utm_source=github.com&utm_medium=referral&utm_content=andrewmolyuk/go-photos&utm_campaign=Badge_Coverage)
 
 ## Prerequisites
 
@@ -36,6 +37,10 @@ go install github.com/fzipp/gocyclo/cmd/gocyclo@latest
 ### make lint
 
 Run both linters, prune any no-longer-needed dependencies from `go.mod` and perform internal code formatter.
+
+### make test
+
+Run all tests in the project and print the results to the console.
 
 ### make build
 
