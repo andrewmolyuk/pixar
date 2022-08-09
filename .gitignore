@@ -1,0 +1,11 @@
+# Idea configuration files
+.idea
+
+# Misc
+.DS_Store
+
+# Test coverage output
+.coverage.out
+
+# Build output
+bin/
