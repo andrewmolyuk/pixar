@@ -20,12 +20,6 @@ lint: fmt staticcheck golangci-lint gocyclo
 test: lint
 	go test ./... -cover
 
-run:
-	go run ./cmd/go-photos/main.go
-
-debug:
-	go run ./cmd/go-photos/main.go --debug
-
 build: lint test
 	go build -ldflags "-s -w" -o ./bin/go-photos ./cmd/go-photos/main.go
 
