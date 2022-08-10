@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/andrewmolyuk/go-photos/log"
+	"github.com/andrewmolyuk/pixar/log"
 	"github.com/rwcarlsen/goexif/exif"
 	"io"
 	"os"
@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-type GoPhotos struct {
+type Pixar struct {
 	InputFolder  string `short:"i" long:"input" description:"Input folder" required:"true"`
 	OutputFolder string `short:"o" long:"output" description:"Output folder" default:"output"`
 	Move         bool   `short:"m" long:"move" description:"Move files instead of copying them"`
@@ -18,7 +18,7 @@ type GoPhotos struct {
 	Log          log.ILog
 }
 
-func (a *GoPhotos) DoWork() {
+func (a *Pixar) DoWork() {
 	input, err := os.Stat(a.InputFolder)
 	if err != nil {
 		a.Log.Error("Folder: \"%s\" does not exist", a.InputFolder)
@@ -31,7 +31,7 @@ func (a *GoPhotos) DoWork() {
 	a.processFolder(a.InputFolder)
 }
 
-func (a *GoPhotos) processFolder(folder string) {
+func (a *Pixar) processFolder(folder string) {
 	a.Log.Debug("Processing folder: \"%s\"", folder)
 	files, err := os.ReadDir(folder)
 	if err != nil {
@@ -52,7 +52,7 @@ func (a *GoPhotos) processFolder(folder string) {
 	}
 }
 
-func (a *GoPhotos) processFile(file string) {
+func (a *Pixar) processFile(file string) {
 	a.Log.Debug("Processing file: \"%s\"", file)
 	if a.isImage(file) {
 		createDate, err := a.getFileExifCreateDate(file)
@@ -64,7 +64,7 @@ func (a *GoPhotos) processFile(file string) {
 	}
 }
 
-func (a *GoPhotos) isImage(file string) bool {
+func (a *Pixar) isImage(file string) bool {
 	extensions := map[string]bool{
 		".jpeg": true,
 		".jpg":  true,
@@ -81,7 +81,7 @@ func (a *GoPhotos) isImage(file string) bool {
 	return false
 }
 
-func (a *GoPhotos) getFileExifCreateDate(file string) (time.Time, error) {
+func (a *Pixar) getFileExifCreateDate(file string) (time.Time, error) {
 
 	f, err := os.Open(file)
 	defer func(file io.Closer) {
@@ -111,7 +111,7 @@ func (a *GoPhotos) getFileExifCreateDate(file string) (time.Time, error) {
 	return createDate, nil
 }
 
-func (a *GoPhotos) processFileToOutput(file string, date time.Time) {
+func (a *Pixar) processFileToOutput(file string, date time.Time) {
 	a.Log.Debug("Processing file: \"%s\" to output", file)
 	folder := a.OutputFolder + "/" + date.Format("2006/01/02")
 	a.createFolder(folder)
@@ -122,7 +122,7 @@ func (a *GoPhotos) processFileToOutput(file string, date time.Time) {
 	}
 }
 
-func (a *GoPhotos) createFolder(folder string) {
+func (a *Pixar) createFolder(folder string) {
 	a.Log.Debug("Creating folder: \"%s\"", folder)
 	err := os.MkdirAll(folder, 0755)
 	if err != nil {
@@ -130,7 +130,7 @@ func (a *GoPhotos) createFolder(folder string) {
 	}
 }
 
-func (a *GoPhotos) moveFile(file string, folder string) {
+func (a *Pixar) moveFile(file string, folder string) {
 	a.Log.Debug("Moving file: \"%s\" to folder: \"%s\"", file, folder)
 	err := os.Rename(file, folder+"/"+filepath.Base(file))
 	if err != nil {
@@ -139,7 +139,7 @@ func (a *GoPhotos) moveFile(file string, folder string) {
 	a.Log.Info("Moved file: \"%s\" to folder: \"%s\"", file, folder)
 }
 
-func (a *GoPhotos) copyFile(file string, folder string) {
+func (a *Pixar) copyFile(file string, folder string) {
 	a.Log.Debug("Copying file: \"%s\" to folder: \"%s\"", file, folder)
 
 	src, err := os.Open(file)

@@ -1,8 +1,8 @@
 package log_test
 
 import (
-	"github.com/andrewmolyuk/go-photos/exitor"
-	"github.com/andrewmolyuk/go-photos/log"
+	"github.com/andrewmolyuk/pixar/exitor"
+	"github.com/andrewmolyuk/pixar/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"io"

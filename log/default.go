@@ -2,7 +2,7 @@ package log
 
 import (
 	"fmt"
-	"github.com/andrewmolyuk/go-photos/exitor"
+	"github.com/andrewmolyuk/pixar/exitor"
 	"runtime"
 	"strings"
 	"sync"

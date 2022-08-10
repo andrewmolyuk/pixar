@@ -1,4 +1,4 @@
-package gophotos
+package pixar
 
 type ILogger interface {
 	Debug(...interface{})

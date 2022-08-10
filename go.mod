@@ -1,4 +1,4 @@
-module github.com/andrewmolyuk/go-photos
+module github.com/andrewmolyuk/pixar
 
 go 1.19
 

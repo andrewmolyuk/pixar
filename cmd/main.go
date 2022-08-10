@@ -1,19 +1,19 @@
 package main
 
 import (
-	"github.com/andrewmolyuk/go-photos/app"
-	"github.com/andrewmolyuk/go-photos/exitor"
-	"github.com/andrewmolyuk/go-photos/log"
+	"github.com/andrewmolyuk/pixar/app"
+	"github.com/andrewmolyuk/pixar/exitor"
+	"github.com/andrewmolyuk/pixar/log"
 	"github.com/jessevdk/go-flags"
 
 	"os"
 )
 
 func main() {
-	a := app.GoPhotos{}
+	a := app.Pixar{}
 
 	parser := flags.NewParser(&a, flags.Default)
-	parser.ShortDescription = "go-photos command line application"
+	parser.ShortDescription = "Pixar is command line pics archiver"
 	parser.LongDescription = "Scan folder and move photos into folders according their EXIF information."
 
 	if _, err := parser.Parse(); err != nil {
