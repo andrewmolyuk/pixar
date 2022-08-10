@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/andrewmolyuk/pixar"
 	"github.com/andrewmolyuk/pixar/log"
 	"github.com/rwcarlsen/goexif/exif"
 	"io"
@@ -11,11 +12,13 @@ import (
 )
 
 type Pixar struct {
-	InputFolder  string `short:"i" long:"input" description:"Input folder" required:"true"`
+	InputFolder  string `short:"i" long:"input" description:"Input folder"`
 	OutputFolder string `short:"o" long:"output" description:"Output folder" default:"output"`
 	Move         bool   `short:"m" long:"move" description:"Move files instead of copying them"`
 	Debug        bool   `short:"d" long:"debug" description:"Debug mode"`
+	ShowVersion  bool   `short:"v" long:"version" description:"Show Pixar version info"`
 	Log          log.ILog
+	BuildInfo    pixar.BuildInfo
 }
 
 func (a *Pixar) DoWork() {

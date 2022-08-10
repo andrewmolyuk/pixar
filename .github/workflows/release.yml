@@ -28,5 +28,5 @@ jobs:
           md5sum: false
           project_path: "./cmd"
           binary_name: "pixar"
-          ldflags: "-s -w"
+          ldflags: "-s -w -X main.version=${{ github.ref }} -X main.commit=${{ github.sha }}"
           extra_files: LICENSE README.md
