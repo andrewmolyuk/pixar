@@ -25,6 +25,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           goos: ${{ matrix.goos }}
           goarch: ${{ matrix.goarch }}
+          md5sum: false
           project_path: "./cmd"
           binary_name: "pixar"
           ldflags: "-s -w"
