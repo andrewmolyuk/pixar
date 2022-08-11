@@ -11,6 +11,7 @@ import (
 	"time"
 )
 
+// Pixar contains command line parameters and operating data
 type Pixar struct {
 	InputFolder  string `short:"i" long:"input" description:"Input folder"`
 	OutputFolder string `short:"o" long:"output" description:"Output folder" default:"output"`
@@ -21,6 +22,7 @@ type Pixar struct {
 	BuildInfo    pixar.BuildInfo
 }
 
+// DoWork is the main process where the application is getting started
 func (a *Pixar) DoWork() {
 	input, err := os.Stat(a.InputFolder)
 	if err != nil {
