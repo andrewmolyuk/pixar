@@ -26,7 +26,7 @@ func main() {
 
 	parser := flags.NewParser(&pxr, flags.Default)
 	parser.ShortDescription = "Pixar is command line pics archiver"
-	parser.LongDescription = "Scan folder and move photos into folders according their EXIF information."
+	parser.LongDescription = "Scan folders and move photos and videos into folders according to their EXIF information"
 
 	if _, err := parser.Parse(); err != nil {
 		code := 1

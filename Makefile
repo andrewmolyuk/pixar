@@ -24,7 +24,8 @@ build: lint test
 	go build -ldflags "-s -w" -o ./bin/pixar ./cmd/main.go
 
 run:
-	rm -Rf ./testdata/output && go run ./cmd/main.go --input ./testdata/input --output ./testdata/output
+	rm -Rf ./testdata/output && go run ./cmd/main.go --debug --input ./testdata/input --output ./testdata/output
+
 .NOTPARALLEL:
 
 .PHONY: all gocyclo golangci-lint staticcheck tidy fmt lint test run debug build

@@ -8,9 +8,24 @@
 Pixar is just a pics archiver written for my personal needs. I sometimes use it to archive my photos to an external
 drive and to the cloud.
 
+## Features
+
+- Automatically move or copy photos and videos to structured folders formatted by Year, Month and Date based on embedded
+  EXIF information when the file was created
+- Run from a batch file or the command line on Mac, Linux or Windows
+
+## Roadmap
+
+- Move or copy unhandled files into separate folder
+- Choose which file types to move or copy
+- Optionally move or copy files without exif data to structured folders using the file date
+- Control how duplicate files are handled when found. Skip, Rename, Overwrite or Move to a separate folder
+
+Any useful idea or suggestion is welcomed.
+
 ## Installation
 
-You can download the latest binary archive suitable to your operating system
+Download the latest binary archive suitable to your operating system
 from [GitHub releases](https://github.com/andrewmolyuk/pixar/releases/latest). Extract the archive to any preferable
 place, and you are ready to run the binary.
 
@@ -19,23 +34,46 @@ For Windows, you can move it to `C:\Program Files\Pixar` and add the folder to t
 
 ## Usage
 
-## Commands
+in order to get help on how to use the application, run:
 
-### make lint
+```shell
+pixar --help
+```
 
-Run both linters, prune any no-longer-needed dependencies from `go.mod` and perform internal code formatter.
+You have to get the similar to following output in your console:
 
-### make test
+```shell
+pixar [OPTIONS]
 
-Run all tests in the project and print the results to the console.
+Scan folders and move photos and videos into folders according to their EXIF information
 
-### make build
+Application Options:
+-i, --input=   Input folder (required)
+-o, --output=  Output folder (default: output)
+-m, --move     Move files instead of copying them
+-d, --debug    Debug mode
+-v, --version  Show Pixar version info
 
-Generate binary file suitable for the local OS.
+Help Options:
+-h, --help     Show this help message
+```
 
-## Development prerequisites
+## Examples
 
-### Staticcheck
+```shell
+pixar -v
+
+pixar --input ./photos
+
+rm -Rf ./testdata/output && go pixar --debug --input ./testdata/input --output ./testdata/output
+```
+
+
+## Development
+
+### Prerequisites
+
+#### Staticcheck
 
 Staticcheck is a state-of-the-art linter for the Go programming language. Beginning with Go 1.17, the simplest way of
 installing Staticcheck is by running:
@@ -44,7 +82,7 @@ installing Staticcheck is by running:
 go install honnef.co/go/tools/cmd/staticcheck@latest
 ```
 
-### golangci-lint
+#### golangci-lint
 
 Golangci-lint is a Go linters aggregator. You can install a binary release on macOS using brew:
 
@@ -53,10 +91,28 @@ brew install golangci-lint
 brew upgrade golangci-lint
 ```
 
-### gocyclo
+#### gocyclo
 
 Gocyclo calculates cyclomatic complexities of functions in Go source code.
 
 ```shell
 go install github.com/fzipp/gocyclo/cmd/gocyclo@latest
 ```
+
+### Commands
+
+#### make lint
+
+Run both linters, prune any no-longer-needed dependencies from `go.mod` and perform internal code formatter.
+
+#### make test
+
+Run all tests in the project and print the results to the console.
+
+#### make build
+
+Generate binary file suitable for the local OS.
+
+#### make run
+
+Execute the application with files from the `testdata` folder. 
