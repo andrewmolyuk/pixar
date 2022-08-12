@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/andrewmolyuk/pixar"
 	"github.com/andrewmolyuk/pixar/app"
+	"github.com/andrewmolyuk/pixar/log"
 	"github.com/jessevdk/go-flags"
 
 	"os"
@@ -40,6 +41,8 @@ func main() {
 		fmt.Printf("Pixar %s\n", fmt.Sprintf("%s (git: %s)", version, commit[:7]))
 		os.Exit(0)
 	}
+
+	log.InitDefault(pxr.Debug, nil, true)
 
 	pxr.DoWork()
 }

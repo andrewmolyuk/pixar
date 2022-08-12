@@ -98,26 +98,35 @@ func New(debugMode bool, secrets []string, isColored bool, e exitor.IExitor) ILo
 
 var logger ILog
 
-// Default creates a new instance of defaultLogger with default values
+// Default creates a new instance of defaultLogger with default values that can be used as a singleton
 func Default() ILog {
 	if logger == nil {
-		logger = New(false, nil, true, exitor.Default())
+		InitDefault(false, nil, true)
 	}
 	return logger
 }
 
+// InitDefault initializes default logger with specific values
+func InitDefault(debugMode bool, secrets []string, isColored bool) {
+	logger = New(debugMode, secrets, isColored, exitor.Default())
+}
+
+// Debug prints debug message if debug mode is enabled
 func Debug(args ...interface{}) {
 	Default().Debug(args...)
 }
 
+// Info prints info message
 func Info(args ...interface{}) {
 	Default().Error(args...)
 }
 
+// Warn prints warn message
 func Warn(args ...interface{}) {
 	Default().Error(args...)
 }
 
+// Error prints error message and exits with code 1
 func Error(args ...interface{}) {
 	Default().Error(args...)
 }
