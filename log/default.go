@@ -101,14 +101,17 @@ var logger ILog
 // Default creates a new instance of defaultLogger with default values that can be used as a singleton
 func Default() ILog {
 	if logger == nil {
-		InitDefault(false, nil, true)
+		InitDefault(false, nil, true, exitor.Default())
 	}
 	return logger
 }
 
 // InitDefault initializes default logger with specific values
-func InitDefault(debugMode bool, secrets []string, isColored bool) {
-	logger = New(debugMode, secrets, isColored, exitor.Default())
+func InitDefault(debugMode bool, secrets []string, isColored bool, e exitor.IExitor) {
+	if e == nil {
+		e = exitor.Default()
+	}
+	logger = New(debugMode, secrets, isColored, e)
 }
 
 // Debug prints debug message if debug mode is enabled
@@ -118,12 +121,12 @@ func Debug(args ...interface{}) {
 
 // Info prints info message
 func Info(args ...interface{}) {
-	Default().Error(args...)
+	Default().Info(args...)
 }
 
 // Warn prints warn message
 func Warn(args ...interface{}) {
-	Default().Error(args...)
+	Default().Warn(args...)
 }
 
 // Error prints error message and exits with code 1

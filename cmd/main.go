@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/andrewmolyuk/pixar"
 	"github.com/andrewmolyuk/pixar/app"
+	"github.com/andrewmolyuk/pixar/exitor"
 	"github.com/andrewmolyuk/pixar/log"
 	"github.com/jessevdk/go-flags"
 
@@ -42,7 +43,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	log.InitDefault(pxr.Debug, nil, true)
+	log.InitDefault(pxr.Debug, nil, true, exitor.Default())
 
 	pxr.DoWork()
 }

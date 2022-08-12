@@ -137,3 +137,58 @@ func TestLogger_Error(t *testing.T) {
 	output := releaseStdOut(stdout, r, w)
 	assert.Equal(t, " [ERROR] test\x1b[0m\n", string(output)[28:], "logger should print fatal message")
 }
+
+func TestDefaultLogger_Debug(t *testing.T) {
+	// Arrange
+	log.InitDefault(true, nil, false, nil)
+	stdout, r, w := catchStdOut()
+
+	// Act
+	log.Debug("test")
+
+	// Assert
+	output := releaseStdOut(stdout, r, w)
+	assert.Equal(t, " [DEBUG] (default.go:119) test\n", output[23:], "logger should print debug message")
+}
+
+func TestDefaultLogger_Info(t *testing.T) {
+	// Arrange
+	log.InitDefault(true, nil, true, nil)
+	stdout, r, w := catchStdOut()
+
+	// Act
+	log.Info("test")
+
+	// Assert
+	output := releaseStdOut(stdout, r, w)
+	assert.Equal(t, " [INFO] test\x1b[0m\n", output[28:], "logger should print info message")
+}
+
+func TestDefaultLogger_Warn(t *testing.T) {
+	// Arrange
+	log.InitDefault(false, nil, true, nil)
+	stdout, r, w := catchStdOut()
+
+	// Act
+	log.Warn("test")
+
+	// Assert
+	output := releaseStdOut(stdout, r, w)
+	assert.Equal(t, " [WARN] test\x1b[0m\n", string(output)[28:], "logger should print warn message")
+}
+
+func TestDefaultLogger_Error(t *testing.T) {
+	// Arrange
+	e := &exitorMock{}
+	e.On("Exit", 1).Return()
+
+	log.InitDefault(true, []string{"secret1", "secret2"}, true, e)
+	stdout, r, w := catchStdOut()
+
+	// Act
+	log.Error("test")
+
+	// Assert
+	output := releaseStdOut(stdout, r, w)
+	assert.Equal(t, " [ERROR] test\x1b[0m\n", string(output)[28:], "logger should print fatal message")
+}
