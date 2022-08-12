@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/andrewmolyuk/pixar"
+	"github.com/andrewmolyuk/pixar/fileops"
 	"github.com/andrewmolyuk/pixar/log"
 	"github.com/rwcarlsen/goexif/exif"
 	"io"
@@ -118,62 +119,22 @@ func (a *Pixar) getFileExifCreateDate(file string) (time.Time, error) {
 func (a *Pixar) processFileToOutput(file string, date time.Time) {
 	log.Debug("Processing file: \"%s\" to output", file)
 	folder := a.OutputFolder + "/" + date.Format("2006/01/02")
-	a.createFolder(folder)
+	err := fileops.CreateFolder(folder)
+	if err != nil {
+		log.Debug("Error creating folder: \"%s\"", err)
+		log.Error("Cannot create folder: \"%s\"", folder)
+	}
 	if a.Move {
-		a.moveFile(file, folder)
+		err := fileops.MoveFile(file, folder)
+		if err != nil {
+			log.Debug("Error moving file: \"%s\"", err)
+			log.Error("Cannot move file: \"%s\" to folder: \"%s\"", file, folder)
+		}
 	} else {
-		a.copyFile(file, folder)
-	}
-}
-
-func (a *Pixar) createFolder(folder string) {
-	log.Debug("Creating folder: \"%s\"", folder)
-	err := os.MkdirAll(folder, 0755)
-	if err != nil {
-		log.Error("Error creating folder: \"%s\". Error: %s", folder, err)
-	}
-}
-
-func (a *Pixar) moveFile(file string, folder string) {
-	log.Debug("Moving file: \"%s\" to folder: \"%s\"", file, folder)
-	err := os.Rename(file, folder+"/"+filepath.Base(file))
-	if err != nil {
-		log.Error("Error moving file: \"%s\" to folder: \"%s\". Error: %s", file, folder, err)
-	}
-	log.Info("Moved file: \"%s\" to folder: \"%s\"", file, folder)
-}
-
-func (a *Pixar) copyFile(file string, folder string) {
-	log.Debug("Copying file: \"%s\" to folder: \"%s\"", file, folder)
-
-	src, err := os.Open(file)
-	if err != nil {
-		log.Error("Error opening file: \"%s\". Error: %s", file, err)
-		return
-	}
-	defer func(file io.Closer) {
-		err := file.Close()
+		err := fileops.CopyFile(file, folder)
 		if err != nil {
-			log.Error("Error closing file: %s", file)
+			log.Debug("Error copying file: \"%s\"", err)
+			log.Error("Cannot copy file: \"%s\" to folder: \"%s\"", file, folder)
 		}
-	}(src)
-
-	dst, err := os.Create(folder + "/" + filepath.Base(file))
-	if err != nil {
-		log.Error("Error creating file: \"%s\". Error: %s", folder+"/"+filepath.Base(file), err)
-		return
 	}
-	defer func(file io.Closer) {
-		err := file.Close()
-		if err != nil {
-			log.Error("Error closing file: %s", file)
-		}
-	}(dst)
-
-	_, err = io.Copy(dst, src)
-	if err != nil {
-		log.Error("Error copying file: \"%s\" to folder: \"%s\". Error: %s", file, folder, err)
-	}
-
-	log.Info("Copied file: \"%s\" to folder: \"%s\"", file, folder)
 }
