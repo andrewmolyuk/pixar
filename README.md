@@ -17,14 +17,16 @@ to the cloud.
 
 ## Roadmap and User Suggestions
 
-- Move or copy unhandled files into separate folder
+- Log the list of the processed files in the CSV format
+- Simulation process for testing and checking purposes
 - Choose which file types to move or copy
+- Move or copy unhandled files into separate folder
 - Optionally move or copy files without exif data to structured folders using the file date
 - Control how duplicate files are handled when found. Skip, Rename, Overwrite or Move to a separate folder
-- Get list of the processed files in the CSV format
 - Create sub folder for events when more than specific amount of pictures where created during specific time interval
 - Add files to delete during processing, like Thumbs.db or .DS_Store files
-- Add ability to sync/upload photos with cloud drives: S3, iDrive etc.
+- Add ability to sync/upload photos with cloud drives: S3, iDrive etc
+- Add custom format for output folder names
 
 Any useful idea or suggestion is welcomed.
 
@@ -53,7 +55,7 @@ pixar [OPTIONS]
 Scan folders and move photos and videos into folders according to their EXIF information
 
 Application Options:
--i, --input=   Input folder (required)
+-i, --input=   Input folder  (default: .)
 -o, --output=  Output folder (default: output)
 -m, --move     Move files instead of copying them
 -d, --debug    Debug mode

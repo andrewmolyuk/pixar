@@ -13,12 +13,11 @@ import (
 
 // Pixar contains command line parameters and operating data
 type Pixar struct {
-	InputFolder  string `short:"i" long:"input" description:"Input folder"`
+	InputFolder  string `short:"i" long:"input" description:"Input folder" default:"."`
 	OutputFolder string `short:"o" long:"output" description:"Output folder" default:"output"`
 	Move         bool   `short:"m" long:"move" description:"Move files instead of copying them"`
 	Debug        bool   `short:"d" long:"debug" description:"Debug mode"`
 	ShowVersion  bool   `short:"v" long:"version" description:"Show Pixar version info"`
-	Log          log.ILog
 	BuildInfo    pixar.BuildInfo
 }
 
@@ -26,27 +25,27 @@ type Pixar struct {
 func (a *Pixar) DoWork() {
 	input, err := os.Stat(a.InputFolder)
 	if err != nil {
-		a.Log.Error("Folder: \"%s\" does not exist", a.InputFolder)
+		log.Error("Folder: \"%s\" does not exist", a.InputFolder)
 	}
 
 	if !input.IsDir() {
-		a.Log.Error("Folder: \"%s\" is not a folder", a.InputFolder)
+		log.Error("Folder: \"%s\" is not a folder", a.InputFolder)
 	}
 
 	a.processFolder(a.InputFolder)
 }
 
 func (a *Pixar) processFolder(folder string) {
-	a.Log.Debug("Processing folder: \"%s\"", folder)
+	log.Debug("Processing folder: \"%s\"", folder)
 	files, err := os.ReadDir(folder)
 	if err != nil {
-		a.Log.Error(err)
+		log.Error(err)
 	}
 
 	for _, f := range files {
 		i, err := f.Info()
 		if err != nil {
-			a.Log.Error(err)
+			log.Error(err)
 		}
 
 		if i.IsDir() {
@@ -58,11 +57,11 @@ func (a *Pixar) processFolder(folder string) {
 }
 
 func (a *Pixar) processFile(file string) {
-	a.Log.Debug("Processing file: \"%s\"", file)
+	log.Debug("Processing file: \"%s\"", file)
 	if a.isImage(file) {
 		createDate, err := a.getFileExifCreateDate(file)
 		if err != nil {
-			a.Log.Warn("Error getting create date from file: \"%s\". Error: %s", file, err)
+			log.Warn("Error getting create date from file: \"%s\". Error: %s", file, err)
 			return
 		}
 		a.processFileToOutput(file, createDate)
@@ -80,7 +79,7 @@ func (a *Pixar) isImage(file string) bool {
 	extension := strings.ToLower(filepath.Ext(file))
 
 	if _, ok := extensions[extension]; ok {
-		a.Log.Debug("File: \"%s\" is an image file", file)
+		log.Debug("File: \"%s\" is an image file", file)
 		return true
 	}
 	return false
@@ -92,24 +91,24 @@ func (a *Pixar) getFileExifCreateDate(file string) (time.Time, error) {
 	defer func(file io.Closer) {
 		err := file.Close()
 		if err != nil {
-			a.Log.Error("Error closing file: %s", file)
+			log.Error("Error closing file: %s", file)
 		}
 	}(f)
 
 	if err != nil {
-		a.Log.Warn("Error opening file: \"%s\". Error: %s", file, err)
+		log.Warn("Error opening file: \"%s\". Error: %s", file, err)
 		return time.Time{}, err
 	}
 
 	exifData, err := exif.Decode(f)
 	if err != nil {
-		a.Log.Warn("Error decoding file: \"%s\". Error: %s", file, err)
+		log.Warn("Error decoding file: \"%s\". Error: %s", file, err)
 		return time.Time{}, err
 	}
 
 	createDate, err := exifData.DateTime()
 	if err != nil {
-		a.Log.Warn("Error getting create date from file: \"%s\". Error: %s", file, err)
+		log.Warn("Error getting create date from file: \"%s\". Error: %s", file, err)
 		return time.Time{}, err
 	}
 
@@ -117,7 +116,7 @@ func (a *Pixar) getFileExifCreateDate(file string) (time.Time, error) {
 }
 
 func (a *Pixar) processFileToOutput(file string, date time.Time) {
-	a.Log.Debug("Processing file: \"%s\" to output", file)
+	log.Debug("Processing file: \"%s\" to output", file)
 	folder := a.OutputFolder + "/" + date.Format("2006/01/02")
 	a.createFolder(folder)
 	if a.Move {
@@ -128,53 +127,53 @@ func (a *Pixar) processFileToOutput(file string, date time.Time) {
 }
 
 func (a *Pixar) createFolder(folder string) {
-	a.Log.Debug("Creating folder: \"%s\"", folder)
+	log.Debug("Creating folder: \"%s\"", folder)
 	err := os.MkdirAll(folder, 0755)
 	if err != nil {
-		a.Log.Error("Error creating folder: \"%s\". Error: %s", folder, err)
+		log.Error("Error creating folder: \"%s\". Error: %s", folder, err)
 	}
 }
 
 func (a *Pixar) moveFile(file string, folder string) {
-	a.Log.Debug("Moving file: \"%s\" to folder: \"%s\"", file, folder)
+	log.Debug("Moving file: \"%s\" to folder: \"%s\"", file, folder)
 	err := os.Rename(file, folder+"/"+filepath.Base(file))
 	if err != nil {
-		a.Log.Error("Error moving file: \"%s\" to folder: \"%s\". Error: %s", file, folder, err)
+		log.Error("Error moving file: \"%s\" to folder: \"%s\". Error: %s", file, folder, err)
 	}
-	a.Log.Info("Moved file: \"%s\" to folder: \"%s\"", file, folder)
+	log.Info("Moved file: \"%s\" to folder: \"%s\"", file, folder)
 }
 
 func (a *Pixar) copyFile(file string, folder string) {
-	a.Log.Debug("Copying file: \"%s\" to folder: \"%s\"", file, folder)
+	log.Debug("Copying file: \"%s\" to folder: \"%s\"", file, folder)
 
 	src, err := os.Open(file)
 	if err != nil {
-		a.Log.Error("Error opening file: \"%s\". Error: %s", file, err)
+		log.Error("Error opening file: \"%s\". Error: %s", file, err)
 		return
 	}
 	defer func(file io.Closer) {
 		err := file.Close()
 		if err != nil {
-			a.Log.Error("Error closing file: %s", file)
+			log.Error("Error closing file: %s", file)
 		}
 	}(src)
 
 	dst, err := os.Create(folder + "/" + filepath.Base(file))
 	if err != nil {
-		a.Log.Error("Error creating file: \"%s\". Error: %s", folder+"/"+filepath.Base(file), err)
+		log.Error("Error creating file: \"%s\". Error: %s", folder+"/"+filepath.Base(file), err)
 		return
 	}
 	defer func(file io.Closer) {
 		err := file.Close()
 		if err != nil {
-			a.Log.Error("Error closing file: %s", file)
+			log.Error("Error closing file: %s", file)
 		}
 	}(dst)
 
 	_, err = io.Copy(dst, src)
 	if err != nil {
-		a.Log.Error("Error copying file: \"%s\" to folder: \"%s\". Error: %s", file, folder, err)
+		log.Error("Error copying file: \"%s\" to folder: \"%s\". Error: %s", file, folder, err)
 	}
 
-	a.Log.Info("Copied file: \"%s\" to folder: \"%s\"", file, folder)
+	log.Info("Copied file: \"%s\" to folder: \"%s\"", file, folder)
 }

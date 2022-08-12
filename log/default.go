@@ -105,3 +105,19 @@ func Default() ILog {
 	}
 	return logger
 }
+
+func Debug(args ...interface{}) {
+	Default().Debug(args...)
+}
+
+func Info(args ...interface{}) {
+	Default().Error(args...)
+}
+
+func Warn(args ...interface{}) {
+	Default().Error(args...)
+}
+
+func Error(args ...interface{}) {
+	Default().Error(args...)
+}
