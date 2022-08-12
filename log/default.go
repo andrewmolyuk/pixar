@@ -42,7 +42,7 @@ func (l *defaultLogger) print(level string, args ...interface{}) {
 	}
 
 	if level == "DEBUG" {
-		_, file, no, ok := runtime.Caller(2)
+		_, file, no, ok := runtime.Caller(3)
 		if ok {
 			file = strings.Split(file, "/")[len(strings.Split(file, "/"))-1]
 			s = fmt.Sprintf("(%s:%d) %s", file, no, s)
