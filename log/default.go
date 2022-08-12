@@ -43,18 +43,15 @@ func (l *defaultLogger) print(level string, args ...interface{}) {
 
 	if level == "DEBUG" {
 		skip := 0
-		for {
-			_, file, no, ok := runtime.Caller(skip)
-			if ok {
-				if !strings.HasSuffix(file, "/log/default.go") {
-					file = strings.Split(file, "/")[len(strings.Split(file, "/"))-1]
-					s = fmt.Sprintf("(%s:%d) %s", file, no, s)
-					break
-				}
-				skip++
-				continue
+		_, file, no, ok := runtime.Caller(skip)
+		for ok {
+			if !strings.HasSuffix(file, "/log/default.go") {
+				file = strings.Split(file, "/")[len(strings.Split(file, "/"))-1]
+				s = fmt.Sprintf("(%s:%d) %s", file, no, s)
+				break
 			}
-			break
+			skip++
+			_, file, no, ok = runtime.Caller(skip)
 		}
 	}
 
