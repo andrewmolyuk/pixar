@@ -148,7 +148,7 @@ func TestDefaultLogger_Debug(t *testing.T) {
 
 	// Assert
 	output := releaseStdOut(stdout, r, w)
-	assert.Equal(t, " [DEBUG] (default.go:119) test\n", output[23:], "logger should print debug message")
+	assert.Equal(t, " [DEBUG] (default_test.go:147) test\n", output[23:], "logger should print debug message")
 }
 
 func TestDefaultLogger_Info(t *testing.T) {
