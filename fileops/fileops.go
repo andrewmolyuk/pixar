@@ -1,12 +1,16 @@
 package fileops
 
 import (
+	"fmt"
 	"github.com/andrewmolyuk/pixar/log"
+	"github.com/rwcarlsen/goexif/exif"
 	"io"
 	"os"
 	"path/filepath"
+	"time"
 )
 
+// MoveFile moves file to destination folder
 func MoveFile(file string, folder string) error {
 	log.Debug("Moving file: \"%s\" to folder: \"%s\"", file, folder)
 	err := os.Rename(file, folder+"/"+filepath.Base(file))
@@ -25,6 +29,7 @@ func MoveFile(file string, folder string) error {
 	return nil
 }
 
+// DeleteFile deletes file from disk
 func DeleteFile(file string) error {
 	err := os.RemoveAll(file)
 	if err != nil {
@@ -33,6 +38,7 @@ func DeleteFile(file string) error {
 	return nil
 }
 
+// CopyFile copies file to destination folder
 func CopyFile(file string, folder string) error {
 	log.Debug("Copying file: \"%s\" to folder: \"%s\"", file, folder)
 
@@ -67,7 +73,50 @@ func CopyFile(file string, folder string) error {
 	return nil
 }
 
+// CreateFolder creates folder if it doesn't exist
 func CreateFolder(folder string) error {
 	log.Debug("Creating folder: \"%s\"", folder)
 	return os.MkdirAll(folder, 0755)
+}
+
+// IsFolderExists checks if folder exists
+func IsFolderExists(folder string) error {
+	f, err := os.Stat(folder)
+	if err != nil {
+		return err
+	}
+
+	if !f.IsDir() {
+		return fmt.Errorf("folder: \"%s\" is not a folder", folder)
+	}
+
+	return nil
+}
+
+// GetFileExifCreateDate returns create date from file's EXIF information
+func GetFileExifCreateDate(file string) (time.Time, error) {
+
+	f, err := os.Open(file)
+	defer func(file io.Closer) {
+		err := file.Close()
+		if err != nil {
+			log.Error("Error closing file: %s", file)
+		}
+	}(f)
+
+	if err != nil {
+		return time.Time{}, err
+	}
+
+	exifData, err := exif.Decode(f)
+	if err != nil {
+		return time.Time{}, err
+	}
+
+	createDate, err := exifData.DateTime()
+	if err != nil {
+		return time.Time{}, err
+	}
+
+	return createDate, nil
 }

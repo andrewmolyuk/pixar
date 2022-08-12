@@ -4,8 +4,6 @@ import (
 	"github.com/andrewmolyuk/pixar"
 	"github.com/andrewmolyuk/pixar/fileops"
 	"github.com/andrewmolyuk/pixar/log"
-	"github.com/rwcarlsen/goexif/exif"
-	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -24,13 +22,9 @@ type Pixar struct {
 
 // DoWork is the main process where the application is getting started
 func (a *Pixar) DoWork() {
-	input, err := os.Stat(a.InputFolder)
+	err := fileops.IsFolderExists(a.InputFolder)
 	if err != nil {
-		log.Error("Folder: \"%s\" does not exist", a.InputFolder)
-	}
-
-	if !input.IsDir() {
-		log.Error("Folder: \"%s\" is not a folder", a.InputFolder)
+		log.Error(err)
 	}
 
 	a.processFolder(a.InputFolder)
@@ -60,7 +54,7 @@ func (a *Pixar) processFolder(folder string) {
 func (a *Pixar) processFile(file string) {
 	log.Debug("Processing file: \"%s\"", file)
 	if a.isImage(file) {
-		createDate, err := a.getFileExifCreateDate(file)
+		createDate, err := fileops.GetFileExifCreateDate(file)
 		if err != nil {
 			log.Warn("Error getting create date from file: \"%s\". Error: %s", file, err)
 			return
@@ -86,55 +80,22 @@ func (a *Pixar) isImage(file string) bool {
 	return false
 }
 
-func (a *Pixar) getFileExifCreateDate(file string) (time.Time, error) {
-
-	f, err := os.Open(file)
-	defer func(file io.Closer) {
-		err := file.Close()
-		if err != nil {
-			log.Error("Error closing file: %s", file)
-		}
-	}(f)
-
-	if err != nil {
-		log.Warn("Error opening file: \"%s\". Error: %s", file, err)
-		return time.Time{}, err
-	}
-
-	exifData, err := exif.Decode(f)
-	if err != nil {
-		log.Warn("Error decoding file: \"%s\". Error: %s", file, err)
-		return time.Time{}, err
-	}
-
-	createDate, err := exifData.DateTime()
-	if err != nil {
-		log.Warn("Error getting create date from file: \"%s\". Error: %s", file, err)
-		return time.Time{}, err
-	}
-
-	return createDate, nil
-}
-
 func (a *Pixar) processFileToOutput(file string, date time.Time) {
 	log.Debug("Processing file: \"%s\" to output", file)
 	folder := a.OutputFolder + "/" + date.Format("2006/01/02")
 	err := fileops.CreateFolder(folder)
 	if err != nil {
-		log.Debug("Error creating folder: \"%s\"", err)
-		log.Error("Cannot create folder: \"%s\"", folder)
+		log.Error("Cannot create folder: \"%s\". Error: \"%s\"", folder, err)
 	}
 	if a.Move {
 		err := fileops.MoveFile(file, folder)
 		if err != nil {
-			log.Debug("Error moving file: \"%s\"", err)
-			log.Error("Cannot move file: \"%s\" to folder: \"%s\"", file, folder)
+			log.Error("Cannot move file: \"%s\" to folder: \"%s\". Error: \"%s\"", file, folder, err)
 		}
 	} else {
 		err := fileops.CopyFile(file, folder)
 		if err != nil {
-			log.Debug("Error copying file: \"%s\"", err)
-			log.Error("Cannot copy file: \"%s\" to folder: \"%s\"", file, folder)
+			log.Error("Cannot copy file: \"%s\" to folder: \"%s\". Error: \"%s\"", file, folder, err)
 		}
 	}
 }
