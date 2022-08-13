@@ -95,7 +95,6 @@ func IsFolderExists(folder string) error {
 
 // GetFileExifCreateDate returns create date from file's EXIF information
 func GetFileExifCreateDate(file string) (time.Time, error) {
-
 	f, err := os.Open(file)
 	defer func(file io.Closer) {
 		err := file.Close()

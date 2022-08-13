@@ -7,7 +7,6 @@ import (
 	"github.com/andrewmolyuk/pixar/exitor"
 	"github.com/andrewmolyuk/pixar/log"
 	"github.com/jessevdk/go-flags"
-
 	"os"
 )
 
@@ -17,14 +16,14 @@ var (
 )
 
 func main() {
-	pxr := app.Pixar{
+	pixarApp := app.Pixar{
 		BuildInfo: pixar.BuildInfo{
 			Version: version,
 			Commit:  commit,
 		},
 	}
 
-	parser := flags.NewParser(&pxr, flags.Default)
+	parser := flags.NewParser(&pixarApp, flags.Default)
 	parser.ShortDescription = "Pixar is command line pics archiver"
 	parser.LongDescription = "Scan folders and move photos and videos into folders according to their EXIF information"
 
@@ -38,12 +37,16 @@ func main() {
 		os.Exit(code)
 	}
 
-	if pxr.ShowVersion {
+	if pixarApp.ShowVersion {
 		fmt.Printf("Pixar %s\n", fmt.Sprintf("%s (git: %s)", version, commit[:7]))
 		os.Exit(0)
 	}
 
-	log.InitDefault(pxr.Debug, nil, true, exitor.Default())
+	log.InitDefault(pixarApp.Debug, nil, true, exitor.Default())
 
-	pxr.DoWork()
+	if pixarApp.Extensions == "" {
+		log.Error("No extensions specified")
+	}
+
+	pixarApp.Run()
 }

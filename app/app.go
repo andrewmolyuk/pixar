@@ -12,25 +12,27 @@ import (
 
 // Pixar contains command line parameters and operating data
 type Pixar struct {
-	InputFolder  string `short:"i" long:"input" description:"Input folder" default:"."`
-	OutputFolder string `short:"o" long:"output" description:"Output folder" default:"output"`
-	Move         bool   `short:"m" long:"move" description:"Move files instead of copying them"`
-	Debug        bool   `short:"d" long:"debug" description:"Debug mode"`
-	ShowVersion  bool   `short:"v" long:"version" description:"Show Pixar version info"`
-	BuildInfo    pixar.BuildInfo
+	InputFolder    string `short:"i" long:"input" description:"Input folder" default:"."`
+	OutputFolder   string `short:"o" long:"output" description:"Output folder" default:"output"`
+	Move           bool   `short:"m" long:"move" description:"Move files instead of copying them"`
+	Debug          bool   `short:"d" long:"debug" description:"Debug mode"`
+	ShowVersion    bool   `short:"v" long:"version" description:"Show Pixar version info"`
+	Extensions     string `short:"e" long:"extensions" description:"File extensions to process" default:".jpeg,.jpg,.tiff,.png"`
+	BuildInfo      pixar.BuildInfo
+	extensionsList []string // cache for extensions list
 }
 
-// DoWork is the main process where the application is getting started
-func (a *Pixar) DoWork() {
-	err := fileops.IsFolderExists(a.InputFolder)
+// Run is the main process where the application is running
+func (p *Pixar) Run() {
+	err := fileops.IsFolderExists(p.InputFolder)
 	if err != nil {
 		log.Error(err)
 	}
 
-	a.processFolder(a.InputFolder)
+	p.processFolder(p.InputFolder)
 }
 
-func (a *Pixar) processFolder(folder string) {
+func (p *Pixar) processFolder(folder string) {
 	log.Debug("Processing folder: \"%s\"", folder)
 	files, err := os.ReadDir(folder)
 	if err != nil {
@@ -44,50 +46,48 @@ func (a *Pixar) processFolder(folder string) {
 		}
 
 		if i.IsDir() {
-			a.processFolder(folder + "/" + f.Name())
+			p.processFolder(folder + "/" + f.Name())
 		} else {
-			a.processFile(folder + "/" + f.Name())
+			p.processFile(folder + "/" + f.Name())
 		}
 	}
 }
 
-func (a *Pixar) processFile(file string) {
+func (p *Pixar) processFile(file string) {
 	log.Debug("Processing file: \"%s\"", file)
-	if a.isImage(file) {
+	if p.isExtensionToProcess(file) {
 		createDate, err := fileops.GetFileExifCreateDate(file)
 		if err != nil {
 			log.Warn("Error getting create date from file: \"%s\". Error: %s", file, err)
 			return
 		}
-		a.processFileToOutput(file, createDate)
+		p.processFileToOutput(file, createDate)
 	}
 }
 
-func (a *Pixar) isImage(file string) bool {
-	extensions := map[string]bool{
-		".jpeg": true,
-		".jpg":  true,
-		".tiff": true,
-		".png":  true,
+func (p *Pixar) isExtensionToProcess(file string) bool {
+	if p.extensionsList == nil {
+		p.extensionsList = strings.Split(p.Extensions, ",")
 	}
 
 	extension := strings.ToLower(filepath.Ext(file))
 
-	if _, ok := extensions[extension]; ok {
-		log.Debug("File: \"%s\" is an image file", file)
-		return true
+	for _, e := range p.extensionsList {
+		if extension == e {
+			return true
+		}
 	}
 	return false
 }
 
-func (a *Pixar) processFileToOutput(file string, date time.Time) {
+func (p *Pixar) processFileToOutput(file string, date time.Time) {
 	log.Debug("Processing file: \"%s\" to output", file)
-	folder := a.OutputFolder + "/" + date.Format("2006/01/02")
+	folder := p.OutputFolder + "/" + date.Format("2006/01/02")
 	err := fileops.CreateFolder(folder)
 	if err != nil {
 		log.Error("Cannot create folder: \"%s\". Error: \"%s\"", folder, err)
 	}
-	if a.Move {
+	if p.Move {
 		err := fileops.MoveFile(file, folder)
 		if err != nil {
 			log.Error("Cannot move file: \"%s\" to folder: \"%s\". Error: \"%s\"", file, folder, err)
