@@ -45,7 +45,7 @@ func main() {
 	log.InitDefault(pixarApp.Debug, nil, true, exitor.Default())
 
 	if pixarApp.Extensions == "" {
-		log.Error("No extensions specified")
+		pixarApp.Extensions = ".jpeg,.jpg,.tiff,.png"
 	}
 
 	pixarApp.Run()
