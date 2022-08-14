@@ -52,7 +52,7 @@ pixar --help
 
 The following output in the console is expected:
 
-```
+```markdown
 pixar [OPTIONS]
 
 Scan folders and move photos and videos into folders according to their EXIF information
