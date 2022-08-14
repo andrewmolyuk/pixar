@@ -7,13 +7,26 @@ type BuildInfo struct {
 }
 
 // Action is a type of action applied to file
-type Action string
+type Action byte
+
+// String returns a string representation of Action
+func (s Action) String() string {
+	switch s {
+	case Copy:
+		return "COPY"
+	case Move:
+		return "MOVE"
+	case Skip:
+		return "SKIP"
+	}
+	return "UNKNOWN"
+}
 
 // List of actions applied to files
 const (
-	Copy Action = "Copy"
-	Move Action = "Move"
-	Skip Action = "Skip"
+	Copy Action = iota
+	Move
+	Skip
 )
 
 // FileAction is a type of action to be performed on file

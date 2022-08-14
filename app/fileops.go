@@ -132,7 +132,7 @@ func writeActionsToCsv(file string, actions []pixar.FileAction) error {
 	writer := csv.NewWriter(f)
 	defer writer.Flush()
 	for _, a := range actions {
-		err := writer.Write([]string{a.File, string(a.Action), a.Destination})
+		err := writer.Write([]string{a.File, a.Action.String(), a.Destination})
 		if err != nil {
 			return err
 		}
