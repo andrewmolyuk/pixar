@@ -2,7 +2,6 @@ package app
 
 import (
 	"github.com/andrewmolyuk/pixar"
-	"github.com/andrewmolyuk/pixar/fileops"
 	"github.com/andrewmolyuk/pixar/log"
 	"os"
 	"path/filepath"
@@ -19,7 +18,7 @@ type Pixar struct {
 	ShowVersion    bool               `short:"v" long:"version" description:"Show Pixar version info"`
 	Extensions     string             `short:"e" long:"extensions" description:"File extensions to process" default:".jpeg,.jpg,.tiff,.png"`
 	Simulation     bool               `short:"s" long:"simulation" description:"Simulation mode"`
-	Csv            bool               `short:"c" long:"csv" description:"Output to CSV file"`
+	Csv            string             `short:"c" long:"csv" description:"CSV file name for actions output"`
 	BuildInfo      pixar.BuildInfo    // BuildInfo contains a build info embedded into binary during version release
 	extensionsList []string           // cache for extensions list
 	actions        []pixar.FileAction // actions to be performed on files
@@ -27,7 +26,7 @@ type Pixar struct {
 
 // Run is the main process where the application is running
 func (p *Pixar) Run() {
-	err := fileops.IsFolderExists(p.InputFolder)
+	err := IsFolderExists(p.InputFolder)
 	if err != nil {
 		log.Error(err)
 	}
@@ -37,6 +36,14 @@ func (p *Pixar) Run() {
 	if p.Simulation {
 		log.Warn("SIMULATION MODE")
 	}
+
+	if p.Csv != "" {
+		err := WriteActionsToCsv(p.Csv, p.actions)
+		if err != nil {
+			log.Error(err)
+		}
+	}
+
 	p.performActions()
 }
 
@@ -68,7 +75,7 @@ func (p *Pixar) defineFileAction(file string) {
 		File: file,
 	}
 	if p.isExtensionToProcess(file) {
-		createDate := fileops.GetFileExifCreateDate(file)
+		createDate := GetFileExifCreateDate(file)
 		if createDate == zeroTime {
 			action.Action = pixar.Skip
 		} else {
@@ -107,11 +114,11 @@ func (p *Pixar) performActions() {
 		case pixar.Copy:
 			log.Info("Copying file: \"%s\" to \"%s\"", a.File, a.Destination)
 			if !p.Simulation {
-				err := fileops.CreateFolder(a.Destination)
+				err := CreateFolder(a.Destination)
 				if err != nil {
 					log.Error("Cannot create folder: \"%s\". Error: \"%s\"", a.Destination, err)
 				}
-				err = fileops.CopyFile(a.File, a.Destination)
+				err = CopyFile(a.File, a.Destination)
 				if err != nil {
 					log.Error("Cannot copy file: \"%s\" to folder: \"%s\". Error: \"%s\"", a.File, a.Destination, err)
 				}
@@ -119,11 +126,11 @@ func (p *Pixar) performActions() {
 		case pixar.Move:
 			log.Info("Moving file: \"%s\" to \"%s\"", a.File, a.Destination)
 			if !p.Simulation {
-				err := fileops.CreateFolder(a.Destination)
+				err := CreateFolder(a.Destination)
 				if err != nil {
 					log.Error("Cannot create folder: \"%s\". Error: \"%s\"", a.Destination, err)
 				}
-				err = fileops.MoveFile(a.File, a.Destination)
+				err = MoveFile(a.File, a.Destination)
 				if err != nil {
 					log.Error("Cannot move file: \"%s\" to folder: \"%s\". Error: \"%s\"", a.File, a.Destination, err)
 				}

@@ -1,7 +1,9 @@
-package fileops
+package app
 
 import (
+	"encoding/csv"
 	"fmt"
+	"github.com/andrewmolyuk/pixar"
 	"github.com/andrewmolyuk/pixar/log"
 	"github.com/rwcarlsen/goexif/exif"
 	"io"
@@ -118,4 +120,28 @@ func GetFileExifCreateDate(file string) time.Time {
 	}
 
 	return createDate
+}
+
+func WriteActionsToCsv(file string, actions []pixar.FileAction) error {
+	log.Debug("Writing actions to CSV file: \"%s\"", file)
+	f, err := os.Create(file)
+	if err != nil {
+		return err
+	}
+	defer func(file io.Closer) {
+		err := file.Close()
+		if err != nil {
+			log.Error("Error closing file: %s", file)
+		}
+	}(f)
+
+	writer := csv.NewWriter(f)
+	defer writer.Flush()
+	for _, a := range actions {
+		err := writer.Write([]string{a.File, string(a.Action), a.Destination})
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

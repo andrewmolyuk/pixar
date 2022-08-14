@@ -16,10 +16,10 @@ to the cloud.
 - Run from a batch file or the command line on Mac, Linux or Windows
 - Choose which file extensions to process
 - Simulation run for testing and checking purposes
+- Log the list of the processed files in the CSV file
 
 ## Roadmap and User Suggestions
 
-- Log the list of the processed files in the CSV format
 - Move or copy unhandled files into separate folder
 - Optionally move or copy files without exif data to structured folders using the file date
 - Control how duplicate files are handled when found. Skip, Rename, Overwrite or Move to a separate folder
@@ -61,6 +61,8 @@ Application Options:
   -d, --debug       Debug mode
   -v, --version     Show Pixar version info
   -e, --extensions= File extensions to process (default: .jpeg,.jpg,.tiff,.png)
+  -s, --simulation  Simulation mode
+  -c, --csv=        CSV file name for actions output
 
 Help Options:
   -h, --help     Show this help message

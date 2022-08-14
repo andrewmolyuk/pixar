@@ -7,12 +7,12 @@ type BuildInfo struct {
 }
 
 // Action is a type of action to be performed by a command
-type Action int
+type Action string
 
 const (
-	Copy Action = iota
-	Move
-	Skip
+	Copy Action = "Copy"
+	Move Action = "Move"
+	Skip Action = "Skip"
 )
 
 // FileAction is a type of action to be performed on file
