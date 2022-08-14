@@ -5,20 +5,17 @@
 [![Codacy Coverage Badge](https://app.codacy.com/project/badge/Coverage/a2731a9c8e33458baea3e9ad9c362d8c)](https://www.codacy.com/gh/andrewmolyuk/pixar/dashboard?utm_source=github.com&utm_medium=referral&utm_content=andrewmolyuk/pixar&utm_campaign=Badge_Coverage)
 ![GitHub release](https://img.shields.io/github/v/release/andrewmolyuk/pixar)
 
-Pixar is a pics archiver written for my personal needs. I sometimes use it to archive my photos to an external drive and
-to the cloud.
+Pixar is a pics archiver written for my personal needs. I use it to archive my photos to an external drive and to the
+cloud.
 
 ## Features
 
-- Automatically move or copy photos and videos to structured folders formatted by Year, Month and Date based on the
-  file's EXIF information when the file was created
+The main features of Pixar are:
 
+- Copy or move photos and videos to structured folders according embedded EXIF information
 - Run from a batch file or the command line on Mac, Linux or Windows
-
 - Choose which file extensions to process
-
 - Simulation run for testing and checking purposes
-
 - Log the list of the processed files in the CSV file
 
 ## Roadmap and User Suggestions
@@ -27,9 +24,10 @@ to the cloud.
 - Optionally move or copy files without exif data to structured folders using the file date
 - Control how duplicate files are handled when found. Skip, Rename, Overwrite or Move to a separate folder
 - Create sub folder for events when more than specific amount of pictures where created during specific time interval
-- Add files to delete during processing, like Thumbs.db or .DS_Store files
-- Add ability to sync/upload photos with cloud drives: S3, iDrive etc
-- Add custom format for output folder names
+- Define files to delete during processing, like Thumbs.db or .DS_Store files
+- Sync/upload photos with cloud drives: S3, iDrive etc
+- Custom format for output folder names
+- Get CSV file with list of actions have to be performed.
 
 Any useful idea or suggestion is welcomed.
 
@@ -70,6 +68,43 @@ Application Options:
 Help Options:
   -h, --help     Show this help message
 ```
+
+### Options
+
+#### input
+
+Input folder where the application will start to scan for files to process. Default value is the current folder. Can be
+an absolute or relative path.
+
+#### output
+
+Output folder where the application will put the processed files. Default value is `output` folder in the current
+folder. Can be an absolute or relative path.
+
+#### move
+
+If this option is set, the application will move the files instead of copying them.
+
+#### debug
+
+If this option is set, the application will run in debug mode and provide more detailed output.
+
+#### version
+
+If this option is set, the application will show the version info.
+
+#### extensions
+
+File extensions to process. Default value is `.jpeg,.jpg,.tiff,.png`.
+
+#### simulation
+
+If this option is set, the application will run in simulation mode and don't perform any actions.
+
+#### csv
+
+CSV file name for actions output. If this option is set, the application will create a CSV file with the actions for
+detailed check and review.
 
 ## Examples
 
