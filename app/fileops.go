@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/andrewmolyuk/pixar"
 	"github.com/andrewmolyuk/pixar/log"
+	"github.com/andrewmolyuk/pixar/semaphore"
 	"github.com/rwcarlsen/goexif/exif"
 	"io"
 	"os"
@@ -12,12 +13,14 @@ import (
 	"time"
 )
 
-func moveFile(file string, folder string) {
+func moveFile(file string, folder string, s *semaphore.Semaphore) {
 	log.Debug("Moving file: \"%s\" to folder: \"%s\"", file, folder)
+	defer s.Release()
 	createFolder(folder)
 	err := os.Rename(file, folder+"/"+filepath.Base(file))
 	if err != nil {
-		copyFile(file, folder)
+		s.Acquire()
+		copyFile(file, folder, s)
 		err = deleteFile(file)
 		if err != nil {
 			log.Error("Error deleting file: %s. Error: %s", file, err)
@@ -33,8 +36,9 @@ func deleteFile(file string) error {
 	return nil
 }
 
-func copyFile(file string, folder string) {
+func copyFile(file string, folder string, s *semaphore.Semaphore) {
 	log.Debug("Copying file: \"%s\" to folder: \"%s\"", file, folder)
+	defer s.Release()
 	createFolder(folder)
 	src, err := os.Open(file)
 	if err != nil {

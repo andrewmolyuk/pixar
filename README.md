@@ -17,6 +17,7 @@ The main features of Pixar are:
 - Choose which file extensions to process
 - Simulation run for testing and checking purposes
 - Log the list of the processed files in the CSV file
+- Limit the number of actions to be performed at the same time
 
 ## Roadmap and User Suggestions
 
@@ -64,6 +65,7 @@ Application Options:
   -e, --extensions= File extensions to process (default: .jpeg,.jpg,.tiff,.png)
   -s, --simulation  Simulation mode
   -c, --csv=        CSV file name for actions output
+  -n, --concurrent= Maximum number of concurrent operations (default: 100)
 
 Help Options:
   -h, --help     Show this help message
@@ -105,6 +107,9 @@ If this option is set, the application will run in simulation mode and don't per
 
 CSV file name for actions output. If this option is set, the application will create a CSV file with the actions for
 detailed check and review.
+
+#### concurrent
+Limit of actions amount to perform at the same time. Default value is 100.
 
 ## Examples
 

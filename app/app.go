@@ -3,6 +3,7 @@ package app
 import (
 	"github.com/andrewmolyuk/pixar"
 	"github.com/andrewmolyuk/pixar/log"
+	"github.com/andrewmolyuk/pixar/semaphore"
 	"os"
 	"path/filepath"
 	"strings"
@@ -11,17 +12,18 @@ import (
 
 // Pixar contains command line parameters and operating data
 type Pixar struct {
-	InputFolder    string             `short:"i" long:"input" description:"Input folder" default:"."`
-	OutputFolder   string             `short:"o" long:"output" description:"Output folder" default:"output"`
-	Move           bool               `short:"m" long:"move" description:"Move files instead of copying them"`
-	Debug          bool               `short:"d" long:"debug" description:"Debug mode"`
-	ShowVersion    bool               `short:"v" long:"version" description:"Show Pixar version info"`
-	Extensions     string             `short:"e" long:"extensions" description:"File extensions to process" default:".jpeg,.jpg,.tiff,.png"`
-	Simulation     bool               `short:"s" long:"simulation" description:"Simulation mode"`
-	Csv            string             `short:"c" long:"csv" description:"CSV file name for actions output"`
-	BuildInfo      pixar.BuildInfo    // BuildInfo contains a build info embedded into binary during version release
-	extensionsList []string           // cache for extensions list
-	actions        []pixar.FileAction // actions to be performed on files
+	InputFolder      string             `short:"i" long:"input" description:"Input folder" default:"."`
+	OutputFolder     string             `short:"o" long:"output" description:"Output folder" default:"output"`
+	Move             bool               `short:"m" long:"move" description:"Move files instead of copying them"`
+	Debug            bool               `short:"d" long:"debug" description:"Debug mode"`
+	ShowVersion      bool               `short:"v" long:"version" description:"Show Pixar version info"`
+	Extensions       string             `short:"e" long:"extensions" description:"File extensions to process" default:".jpeg,.jpg,.tiff,.png"`
+	Simulation       bool               `short:"s" long:"simulation" description:"Simulation mode"`
+	Csv              string             `short:"c" long:"csv" description:"CSV file name for actions output"`
+	MaxConcurrentOps uint               `short:"n" long:"concurrent" description:"Maximum number of concurrent operations" default:"100"`
+	BuildInfo        pixar.BuildInfo    // BuildInfo contains a build info embedded into binary during version release
+	extensionsList   []string           // cache for extensions list
+	actions          []pixar.FileAction // actions to be performed on files
 }
 
 // Run is the main process where the application is running
@@ -110,22 +112,27 @@ func (p *Pixar) isExtensionToProcess(file string) bool {
 }
 
 func (p *Pixar) performActions() {
-	if p.Simulation {
-		return
-	}
+	s := semaphore.NewSemaphore(p.MaxConcurrentOps)
 	for _, a := range p.actions {
 		switch a.Action {
 		case pixar.Copy:
 			log.Info("Copying file: \"%s\" to \"%s\"", a.File, a.Destination)
-			copyFile(a.File, a.Destination)
+			if !p.Simulation {
+				s.Acquire()
+				go copyFile(a.File, a.Destination, s)
+			}
 
 		case pixar.Move:
 			log.Info("Moving file: \"%s\" to \"%s\"", a.File, a.Destination)
-			moveFile(a.File, a.Destination)
+			if !p.Simulation {
+				s.Acquire()
+				go moveFile(a.File, a.Destination, s)
+			}
 
 		case pixar.Skip:
 			log.Info("Skip file: \"%s\"", a.File)
 
 		}
 	}
+	s.Wait()
 }
