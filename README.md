@@ -14,8 +14,11 @@ to the cloud.
   file's EXIF information when the file was created
 
 - Run from a batch file or the command line on Mac, Linux or Windows
+
 - Choose which file extensions to process
+
 - Simulation run for testing and checking purposes
+
 - Log the list of the processed files in the CSV file
 
 ## Roadmap and User Suggestions

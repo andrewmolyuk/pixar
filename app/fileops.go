@@ -12,16 +12,15 @@ import (
 	"time"
 )
 
-// MoveFile moves file to destination folder
-func MoveFile(file string, folder string) error {
+func moveFile(file string, folder string) error {
 	log.Debug("Moving file: \"%s\" to folder: \"%s\"", file, folder)
 	err := os.Rename(file, folder+"/"+filepath.Base(file))
 	if err != nil {
-		err = CopyFile(file, folder)
+		err = copyFile(file, folder)
 		if err != nil {
 			return err
 		}
-		err = DeleteFile(file)
+		err = deleteFile(file)
 		if err != nil {
 			return err
 		}
@@ -31,8 +30,7 @@ func MoveFile(file string, folder string) error {
 	return nil
 }
 
-// DeleteFile deletes file from disk
-func DeleteFile(file string) error {
+func deleteFile(file string) error {
 	err := os.RemoveAll(file)
 	if err != nil {
 		return err
@@ -40,8 +38,7 @@ func DeleteFile(file string) error {
 	return nil
 }
 
-// CopyFile copies file to destination folder
-func CopyFile(file string, folder string) error {
+func copyFile(file string, folder string) error {
 	log.Debug("Copying file: \"%s\" to folder: \"%s\"", file, folder)
 
 	src, err := os.Open(file)
@@ -75,14 +72,12 @@ func CopyFile(file string, folder string) error {
 	return nil
 }
 
-// CreateFolder creates folder if it doesn't exist
-func CreateFolder(folder string) error {
+func createFolder(folder string) error {
 	log.Debug("Creating folder: \"%s\"", folder)
 	return os.MkdirAll(folder, 0755)
 }
 
-// IsFolderExists checks if folder exists
-func IsFolderExists(folder string) error {
+func isFolderExists(folder string) error {
 	f, err := os.Stat(folder)
 	if err != nil {
 		return err
@@ -95,8 +90,7 @@ func IsFolderExists(folder string) error {
 	return nil
 }
 
-// GetFileExifCreateDate returns create date from file's EXIF information
-func GetFileExifCreateDate(file string) time.Time {
+func getFileExifCreateDate(file string) time.Time {
 	f, err := os.Open(file)
 	defer func(file io.Closer) {
 		err := file.Close()
@@ -122,7 +116,7 @@ func GetFileExifCreateDate(file string) time.Time {
 	return createDate
 }
 
-func WriteActionsToCsv(file string, actions []pixar.FileAction) error {
+func writeActionsToCsv(file string, actions []pixar.FileAction) error {
 	log.Debug("Writing actions to CSV file: \"%s\"", file)
 	f, err := os.Create(file)
 	if err != nil {

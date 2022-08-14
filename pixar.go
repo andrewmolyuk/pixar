@@ -10,9 +10,9 @@ type BuildInfo struct {
 type Action string
 
 const (
-	Copy Action = "Copy"
-	Move Action = "Move"
-	Skip Action = "Skip"
+	Copy Action = "Copy" // Copy is an action to copy a file
+	Move Action = "Move" // Move is an action to move a file
+	Skip Action = "Skip" // Skip is an action that skips the file
 )
 
 // FileAction is a type of action to be performed on file

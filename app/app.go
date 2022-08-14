@@ -26,7 +26,7 @@ type Pixar struct {
 
 // Run is the main process where the application is running
 func (p *Pixar) Run() {
-	err := IsFolderExists(p.InputFolder)
+	err := isFolderExists(p.InputFolder)
 	if err != nil {
 		log.Error(err)
 	}
@@ -38,7 +38,7 @@ func (p *Pixar) Run() {
 	}
 
 	if p.Csv != "" {
-		err := WriteActionsToCsv(p.Csv, p.actions)
+		err := writeActionsToCsv(p.Csv, p.actions)
 		if err != nil {
 			log.Error(err)
 		}
@@ -75,7 +75,7 @@ func (p *Pixar) defineFileAction(file string) {
 		File: file,
 	}
 	if p.isExtensionToProcess(file) {
-		createDate := GetFileExifCreateDate(file)
+		createDate := getFileExifCreateDate(file)
 		if createDate == zeroTime {
 			action.Action = pixar.Skip
 		} else {
@@ -114,11 +114,11 @@ func (p *Pixar) performActions() {
 		case pixar.Copy:
 			log.Info("Copying file: \"%s\" to \"%s\"", a.File, a.Destination)
 			if !p.Simulation {
-				err := CreateFolder(a.Destination)
+				err := createFolder(a.Destination)
 				if err != nil {
 					log.Error("Cannot create folder: \"%s\". Error: \"%s\"", a.Destination, err)
 				}
-				err = CopyFile(a.File, a.Destination)
+				err = copyFile(a.File, a.Destination)
 				if err != nil {
 					log.Error("Cannot copy file: \"%s\" to folder: \"%s\". Error: \"%s\"", a.File, a.Destination, err)
 				}
@@ -126,11 +126,11 @@ func (p *Pixar) performActions() {
 		case pixar.Move:
 			log.Info("Moving file: \"%s\" to \"%s\"", a.File, a.Destination)
 			if !p.Simulation {
-				err := CreateFolder(a.Destination)
+				err := createFolder(a.Destination)
 				if err != nil {
 					log.Error("Cannot create folder: \"%s\". Error: \"%s\"", a.Destination, err)
 				}
-				err = MoveFile(a.File, a.Destination)
+				err = moveFile(a.File, a.Destination)
 				if err != nil {
 					log.Error("Cannot move file: \"%s\" to folder: \"%s\". Error: \"%s\"", a.File, a.Destination, err)
 				}
