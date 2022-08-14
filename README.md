@@ -3,7 +3,7 @@
 [![GitHub Actions](https://github.com/andrewmolyuk/pixar/actions/workflows/ci.yml/badge.svg)](https://github.com/andrewmolyuk/pixar/actions/workflows/ci.yml)
 [![Codacy Grade Badge](https://app.codacy.com/project/badge/Grade/a2731a9c8e33458baea3e9ad9c362d8c)](https://www.codacy.com/gh/andrewmolyuk/pixar/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=andrewmolyuk/pixar&amp;utm_campaign=Badge_Grade)
 [![Codacy Coverage Badge](https://app.codacy.com/project/badge/Coverage/a2731a9c8e33458baea3e9ad9c362d8c)](https://www.codacy.com/gh/andrewmolyuk/pixar/dashboard?utm_source=github.com&utm_medium=referral&utm_content=andrewmolyuk/pixar&utm_campaign=Badge_Coverage)
-![GitHub release](https://img.shields.io/github/v/release/andrewmolyuk/pixar)
+[![GitHub release](https://img.shields.io/github/v/release/andrewmolyuk/pixar)](https://github.com/andrewmolyuk/pixar/releases)
 
 Pixar is a pics archiver written for my personal needs. I use it to archive my photos to an external drive and to the
 cloud.
