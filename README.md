@@ -21,14 +21,14 @@ The main features of Pixar are:
 
 ## Roadmap and User Suggestions
 
-- Move or copy unhandled files into separate folder
-- Optionally move or copy files without exif data to structured folders using the file date
 - Control how duplicate files are handled when found. Skip, Rename, Overwrite or Move to a separate folder
+- Move or copy unhandled files into separate folder
+- Optionally move or copy files without exif data to structured folders using the file modification date
 - Create sub folder for events when more than specific amount of pictures where created during specific time interval
 - Define files to delete during processing, like Thumbs.db or .DS_Store files
 - Sync/upload photos with cloud drives: S3, iDrive etc
 - Custom format for output folder names
-- Get CSV file with list of actions have to be performed.
+- Apply CSV file with list of actions have to be performed.
 
 Any useful idea or suggestion is welcomed.
 
@@ -43,15 +43,15 @@ For Windows, you can move it to `C:\Program Files\Pixar` and add the folder to t
 
 ## Usage
 
-in order to get help on how to use the application, run:
+Get the list of available options with `pixar --help` command.
 
 ```shell
 pixar --help
 ```
 
-You have to get the similar to following output in your console:
+The following output in the console is expected:
 
-```shell
+```
 pixar [OPTIONS]
 
 Scan folders and move photos and videos into folders according to their EXIF information
@@ -73,43 +73,44 @@ Help Options:
 
 ### Options
 
-#### input
+#### -i, --input
 
 Input folder where the application will start to scan for files to process. Default value is the current folder. Can be
 an absolute or relative path.
 
-#### output
+#### -o, --output
 
 Output folder where the application will put the processed files. Default value is `output` folder in the current
 folder. Can be an absolute or relative path.
 
-#### move
+#### -m, --move
 
 If this option is set, the application will move the files instead of copying them.
 
-#### debug
+#### -d, --debug
 
 If this option is set, the application will run in debug mode and provide more detailed output.
 
-#### version
+#### -v, --version
 
 If this option is set, the application will show the version info.
 
-#### extensions
+#### -e, --extensions
 
 File extensions to process. Default value is `.jpeg,.jpg,.tiff,.png`.
 
-#### simulation
+#### -s, --simulation
 
 If this option is set, the application will run in simulation mode and don't perform any actions.
 
-#### csv
+#### -c, --csv
 
 CSV file name for actions output. If this option is set, the application will create a CSV file with the actions for
 detailed check and review.
 
-#### concurrent
-Limit of actions amount to perform at the same time. Default value is 100.
+#### -n, --concurrent
+
+Limit of actions amount to perform at the same time. Default value is `100`.
 
 ## Examples
 
