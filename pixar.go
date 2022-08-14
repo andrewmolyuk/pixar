@@ -1,5 +1,7 @@
 package pixar
 
+import "time"
+
 // BuildInfo contains a minimal build information embedded into binary during version release
 type BuildInfo struct {
 	Version string
@@ -31,7 +33,9 @@ const (
 
 // FileAction is a type of action to be performed on file
 type FileAction struct {
-	File        string
-	Destination string
-	Action      Action
+	File             string
+	Destination      string
+	ModificationDate time.Time
+	ExifCreateDate   time.Time
+	Action           Action
 }

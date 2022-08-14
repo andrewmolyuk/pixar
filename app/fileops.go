@@ -90,6 +90,15 @@ func isFolderExists(folder string) error {
 	return nil
 }
 
+func getFileModificationDate(file string) time.Time {
+	f, err := os.Stat(file)
+	if err != nil {
+		return time.Time{}
+	}
+
+	return f.ModTime()
+}
+
 func getFileExifCreateDate(file string) time.Time {
 	f, err := os.Open(file)
 	defer func(file io.Closer) {
@@ -117,6 +126,7 @@ func getFileExifCreateDate(file string) time.Time {
 }
 
 func writeActionsToCsv(file string, actions []pixar.FileAction) error {
+	var zeroTime = time.Time{}
 	log.Debug("Writing actions to CSV file: \"%s\"", file)
 	f, err := os.Create(file)
 	if err != nil {
@@ -131,8 +141,22 @@ func writeActionsToCsv(file string, actions []pixar.FileAction) error {
 
 	writer := csv.NewWriter(f)
 	defer writer.Flush()
+
+	err = writer.Write([]string{"file", "destination_folder", "modification_date", "exif_create_date", "action"})
+	if err != nil {
+		return err
+	}
+
 	for _, a := range actions {
-		err := writer.Write([]string{a.File, a.Action.String(), a.Destination})
+		md := ""
+		if a.ModificationDate != zeroTime {
+			md = a.ModificationDate.String()
+		}
+		ecd := ""
+		if a.ExifCreateDate != zeroTime {
+			ecd = a.ExifCreateDate.String()
+		}
+		err := writer.Write([]string{a.File, a.Destination, md, ecd, a.Action.String()})
 		if err != nil {
 			return err
 		}

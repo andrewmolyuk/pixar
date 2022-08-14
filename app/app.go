@@ -75,12 +75,13 @@ func (p *Pixar) defineFileAction(file string) {
 		File: file,
 	}
 	if p.isExtensionToProcess(file) {
-		createDate := getFileExifCreateDate(file)
-		if createDate == zeroTime {
+		action.ModificationDate = getFileModificationDate(file)
+		exifCreateDate := getFileExifCreateDate(file)
+		if exifCreateDate == zeroTime {
 			action.Action = pixar.Skip
 		} else {
-
-			action.Destination = p.OutputFolder + "/" + createDate.Format("2006/01/02")
+			action.ExifCreateDate = exifCreateDate
+			action.Destination = p.OutputFolder + "/" + exifCreateDate.Format("2006/01/02")
 			if p.Move {
 				action.Action = pixar.Move
 			} else {
