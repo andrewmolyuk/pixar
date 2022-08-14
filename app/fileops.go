@@ -128,6 +128,12 @@ func getFileExifCreateDate(file string) time.Time {
 func writeActionsToCsv(file string, actions []pixar.FileAction) error {
 	var zeroTime = time.Time{}
 	log.Debug("Writing actions to CSV file: \"%s\"", file)
+
+	err := createFolder(filepath.Dir(file))
+	if err != nil {
+		return err
+	}
+
 	f, err := os.Create(file)
 	if err != nil {
 		return err
