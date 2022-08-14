@@ -23,6 +23,9 @@ test: lint
 build: lint test
 	go build -ldflags "-s -w" -o ./bin/pixar ./cmd/main.go
 
+sim:
+	rm -Rf ./testdata/output && go run ./cmd/main.go --input ./testdata/input --output ./testdata/output -s
+
 run:
 	rm -Rf ./testdata/output && go run ./cmd/main.go --debug --input ./testdata/input --output ./testdata/output
 

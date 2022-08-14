@@ -15,11 +15,11 @@ to the cloud.
 
 - Run from a batch file or the command line on Mac, Linux or Windows
 - Choose which file extensions to process
+- Simulation run for testing and checking purposes
 
 ## Roadmap and User Suggestions
 
 - Log the list of the processed files in the CSV format
-- Simulation process for testing and checking purposes
 - Move or copy unhandled files into separate folder
 - Optionally move or copy files without exif data to structured folders using the file date
 - Control how duplicate files are handled when found. Skip, Rename, Overwrite or Move to a separate folder
