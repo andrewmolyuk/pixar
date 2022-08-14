@@ -16,6 +16,9 @@ import (
 func moveFile(file string, folder string, s *semaphore.Semaphore) {
 	log.Debug("Moving file: \"%s\" to folder: \"%s\"", file, folder)
 	defer s.Release()
+
+	failIfFileExists(file, folder)
+
 	createFolder(folder)
 	err := os.Rename(file, folder+"/"+filepath.Base(file))
 	if err != nil {
@@ -39,6 +42,9 @@ func deleteFile(file string) error {
 func copyFile(file string, folder string, s *semaphore.Semaphore) {
 	log.Debug("Copying file: \"%s\" to folder: \"%s\"", file, folder)
 	defer s.Release()
+
+	failIfFileExists(file, folder)
+
 	createFolder(folder)
 	src, err := os.Open(file)
 	if err != nil {
@@ -55,6 +61,12 @@ func copyFile(file string, folder string, s *semaphore.Semaphore) {
 	_, err = io.Copy(dst, src)
 	if err != nil {
 		log.Error("Error copying file: %s. Error: %s", file, err)
+	}
+}
+
+func failIfFileExists(file string, folder string) {
+	if _, err := os.Stat(folder + "/" + filepath.Base(file)); err == nil {
+		log.Error("File: \"%s\" already exists in folder: \"%s\"", file, folder)
 	}
 }
 

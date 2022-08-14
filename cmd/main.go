@@ -48,5 +48,17 @@ func main() {
 		pixarApp.Extensions = ".jpeg,.jpg,.tiff,.png"
 	}
 
+	if pixarApp.DuplicatesPolicy == "" {
+		pixarApp.DuplicatesPolicy = "skip"
+	}
+
+	if pixarApp.DuplicatesPolicy != "skip" && pixarApp.DuplicatesPolicy != "folder" {
+		log.Error("Duplicates policy must be either 'skip' or 'folder'")
+	}
+
+	if pixarApp.Simulation {
+		log.Warn("SIMULATION MODE")
+	}
+
 	pixarApp.Run()
 }

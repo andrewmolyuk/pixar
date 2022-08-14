@@ -21,6 +21,7 @@ type Pixar struct {
 	Simulation       bool               `short:"s" long:"simulation" description:"Simulation mode"`
 	Csv              string             `short:"c" long:"csv" description:"CSV file name for actions output"`
 	MaxConcurrentOps uint               `short:"n" long:"concurrent" description:"Maximum number of concurrent operations" default:"100"`
+	DuplicatesPolicy string             `short:"p" long:"policy" description:"Policy for duplicates: skip, folder" default:"skip"`
 	BuildInfo        pixar.BuildInfo    // BuildInfo contains a build info embedded into binary during version release
 	extensionsList   []string           // cache for extensions list
 	actions          []pixar.FileAction // actions to be performed on files
@@ -34,10 +35,6 @@ func (p *Pixar) Run() {
 	}
 
 	p.processFolder(p.InputFolder)
-
-	if p.Simulation {
-		log.Warn("SIMULATION MODE")
-	}
 
 	if p.Csv != "" {
 		err := writeActionsToCsv(p.Csv, p.actions)
@@ -93,6 +90,7 @@ func (p *Pixar) defineFileAction(file string) {
 	} else {
 		action.Action = pixar.Skip
 	}
+	action = p.detectDuplicates(action)
 	p.actions = append(p.actions, action)
 }
 
@@ -135,4 +133,36 @@ func (p *Pixar) performActions() {
 		}
 	}
 	s.Wait()
+}
+
+func (p *Pixar) detectDuplicates(action pixar.FileAction) pixar.FileAction {
+	log.Debug("Detecting duplicates for file: \"%s\"", action.File)
+
+	if action.Action != pixar.Move && action.Action != pixar.Copy {
+		return action
+	}
+
+	isDuplicate := false
+	if _, err := os.Stat(action.Destination + "/" + filepath.Base(action.File)); err == nil {
+		isDuplicate = true
+	}
+	if !isDuplicate {
+		for _, a := range p.actions {
+			if action.Destination+"/"+filepath.Base(action.File) == a.Destination+"/"+filepath.Base(a.File) {
+				isDuplicate = true
+				break
+			}
+		}
+	}
+
+	if isDuplicate {
+		log.Warn("Duplicate file: \"%s\" in destination: \"%s\"", action.File, action.Destination)
+		switch p.DuplicatesPolicy {
+		case "skip":
+			action.Action = pixar.Skip
+		case "folder":
+			action.Destination = p.OutputFolder + "/Duplicates/" + filepath.Dir(action.File)
+		}
+	}
+	return action
 }

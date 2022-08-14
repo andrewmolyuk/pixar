@@ -12,16 +12,17 @@ cloud.
 
 The main features of Pixar are:
 
+- Nothing is overridable during the run of the program, so it's lossless
 - Copy or move photos and videos to structured folders according embedded EXIF information
 - Run from a batch file or the command line on Mac, Linux or Windows
 - Choose which file extensions to process
 - Simulation run for testing and checking purposes
 - Log the list of the processed files in the CSV file
 - Limit the number of actions to be performed at the same time
+- Skip duplicate files or place them into a separate folder
 
 ## Roadmap and User Suggestions
 
-- Control how duplicate files are handled when found. Skip, Rename, Overwrite or Move to a separate folder
 - Move or copy unhandled files into separate folder
 - Optionally move or copy files without exif data to structured folders using the file modification date
 - Create sub folder for events when more than specific amount of pictures where created during specific time interval
@@ -66,6 +67,7 @@ Application Options:
   -s, --simulation  Simulation mode
   -c, --csv=        CSV file name for actions output
   -n, --concurrent= Maximum number of concurrent operations (default: 100)
+  -p, --policy=     Policy for duplicates: skip, folder (default: skip)
 
 Help Options:
   -h, --help     Show this help message
@@ -111,6 +113,12 @@ detailed check and review.
 #### -n, --concurrent
 
 Limit of actions amount to perform at the same time. Default value is `100`.
+
+#### -p, --policy
+
+Define policy for duplicates: skip, folder. Default value is `skip`. When folder policy is set, the application will
+copy or move duplicates into separate folder named `Duplicates` under `output` folder with all `input` folders structure
+where the duplicate was found. In order if file already exists in duplication folder the application is failed.
 
 ## Examples
 
