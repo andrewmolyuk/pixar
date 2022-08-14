@@ -110,32 +110,19 @@ func (p *Pixar) isExtensionToProcess(file string) bool {
 }
 
 func (p *Pixar) performActions() {
+	if p.Simulation {
+		return
+	}
 	for _, a := range p.actions {
 		switch a.Action {
 		case pixar.Copy:
 			log.Info("Copying file: \"%s\" to \"%s\"", a.File, a.Destination)
-			if !p.Simulation {
-				err := createFolder(a.Destination)
-				if err != nil {
-					log.Error("Cannot create folder: \"%s\". Error: \"%s\"", a.Destination, err)
-				}
-				err = copyFile(a.File, a.Destination)
-				if err != nil {
-					log.Error("Cannot copy file: \"%s\" to folder: \"%s\". Error: \"%s\"", a.File, a.Destination, err)
-				}
-			}
+			copyFile(a.File, a.Destination)
+
 		case pixar.Move:
 			log.Info("Moving file: \"%s\" to \"%s\"", a.File, a.Destination)
-			if !p.Simulation {
-				err := createFolder(a.Destination)
-				if err != nil {
-					log.Error("Cannot create folder: \"%s\". Error: \"%s\"", a.Destination, err)
-				}
-				err = moveFile(a.File, a.Destination)
-				if err != nil {
-					log.Error("Cannot move file: \"%s\" to folder: \"%s\". Error: \"%s\"", a.File, a.Destination, err)
-				}
-			}
+			moveFile(a.File, a.Destination)
+
 		case pixar.Skip:
 			log.Info("Skip file: \"%s\"", a.File)
 

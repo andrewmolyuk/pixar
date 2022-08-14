@@ -12,22 +12,17 @@ import (
 	"time"
 )
 
-func moveFile(file string, folder string) error {
+func moveFile(file string, folder string) {
 	log.Debug("Moving file: \"%s\" to folder: \"%s\"", file, folder)
+	createFolder(folder)
 	err := os.Rename(file, folder+"/"+filepath.Base(file))
 	if err != nil {
-		err = copyFile(file, folder)
-		if err != nil {
-			return err
-		}
+		copyFile(file, folder)
 		err = deleteFile(file)
 		if err != nil {
-			return err
+			log.Error("Error deleting file: %s. Error: %s", file, err)
 		}
 	}
-
-	log.Info("Moved file: \"%s\" to folder: \"%s\"", file, folder)
-	return nil
 }
 
 func deleteFile(file string) error {
@@ -38,43 +33,40 @@ func deleteFile(file string) error {
 	return nil
 }
 
-func copyFile(file string, folder string) error {
+func copyFile(file string, folder string) {
 	log.Debug("Copying file: \"%s\" to folder: \"%s\"", file, folder)
-
+	createFolder(folder)
 	src, err := os.Open(file)
 	if err != nil {
-		return err
+		log.Error("Error opening file: %s. Error: %s", file, err)
 	}
-	defer func(file io.Closer) {
-		err := file.Close()
-		if err != nil {
-			log.Warn("Error closing file: %s", file)
-		}
-	}(src)
+	defer closeFile(src)
 
 	dst, err := os.Create(folder + "/" + filepath.Base(file))
 	if err != nil {
-		return err
+		log.Error("Error creating file: %s. Error: %s", folder+"/"+filepath.Base(file), err)
 	}
-	defer func(file io.Closer) {
-		err := file.Close()
-		if err != nil {
-			log.Warn("Error closing file: %s", file)
-		}
-	}(dst)
+	defer closeFile(dst)
 
 	_, err = io.Copy(dst, src)
 	if err != nil {
-		return err
+		log.Error("Error copying file: %s. Error: %s", file, err)
 	}
-
-	log.Info("Copied file: \"%s\" to folder: \"%s\"", file, folder)
-	return nil
 }
 
-func createFolder(folder string) error {
+func closeFile(file io.Closer) {
+	err := file.Close()
+	if err != nil {
+		log.Error("Error closing file: %s. Error: %s", file, err)
+	}
+}
+
+func createFolder(folder string) {
 	log.Debug("Creating folder: \"%s\"", folder)
-	return os.MkdirAll(folder, 0755)
+	err := os.MkdirAll(folder, 0755)
+	if err != nil {
+		log.Error("Error creating folder: %s. Error:", folder, err)
+	}
 }
 
 func isFolderExists(folder string) error {
@@ -101,12 +93,7 @@ func getFileModificationDate(file string) time.Time {
 
 func getFileExifCreateDate(file string) time.Time {
 	f, err := os.Open(file)
-	defer func(file io.Closer) {
-		err := file.Close()
-		if err != nil {
-			log.Error("Error closing file: %s", file)
-		}
-	}(f)
+	defer closeFile(f)
 
 	if err != nil {
 		return time.Time{}
@@ -129,10 +116,7 @@ func writeActionsToCsv(file string, actions []pixar.FileAction) error {
 	var zeroTime = time.Time{}
 	log.Debug("Writing actions to CSV file: \"%s\"", file)
 
-	err := createFolder(filepath.Dir(file))
-	if err != nil {
-		return err
-	}
+	createFolder(filepath.Dir(file))
 
 	f, err := os.Create(file)
 	if err != nil {
