@@ -116,7 +116,7 @@ func getFileExifCreateDate(file string) time.Time {
 	}
 
 	meta, err := imagemeta.Parse(f)
-	if err != nil {
+	if err != nil || meta == nil {
 		return time.Time{}
 	}
 
