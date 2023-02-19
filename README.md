@@ -29,7 +29,8 @@ The main features of Pixar are:
 - Define files to delete during processing, like Thumbs.db or .DS_Store files
 - Sync/upload photos with cloud drives: S3, iDrive etc
 - Custom format for output folder names
-- Apply CSV file with list of actions have to be performed.
+- Apply CSV file with list of actions have to be performed
+- Load configuration from a JSON file
 
 Any useful idea or suggestion is welcomed.
 
@@ -125,7 +126,7 @@ where the duplicate was found. In order if file already exists in duplication fo
 ```shell
 pixar -v
 
-pixar --input ./photos
+pixar --input ./photos -s -p folder
 
 rm -Rf ./testdata/output && go pixar --debug --input ./testdata/input --output ./testdata/output
 ```
@@ -139,6 +140,10 @@ rm -Rf ./testdata/output && go pixar --debug --input ./testdata/input --output .
 Staticcheck is a state-of-the-art linter for the Go programming language. Beginning with Go 1.17, the simplest way of
 installing Staticcheck is by running:
 
+```shell
+brew install staticcheck
+```
+or 
 ```shell
 go install honnef.co/go/tools/cmd/staticcheck@latest
 ```

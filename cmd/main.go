@@ -45,7 +45,7 @@ func main() {
 	log.InitDefault(pixarApp.Debug, nil, true, exitor.Default())
 
 	if pixarApp.Extensions == "" {
-		pixarApp.Extensions = ".jpeg,.jpg,.tiff,.png"
+		pixarApp.Extensions = ".jpeg,.jpg,.tiff,.png,.heic"
 	}
 
 	if pixarApp.DuplicatesPolicy == "" {

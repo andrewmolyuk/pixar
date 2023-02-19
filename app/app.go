@@ -17,7 +17,7 @@ type Pixar struct {
 	Move             bool               `short:"m" long:"move" description:"Move files instead of copying them"`
 	Debug            bool               `short:"d" long:"debug" description:"Debug mode"`
 	ShowVersion      bool               `short:"v" long:"version" description:"Show Pixar version info"`
-	Extensions       string             `short:"e" long:"extensions" description:"File extensions to process" default:".jpeg,.jpg,.tiff,.png"`
+	Extensions       string             `short:"e" long:"extensions" description:"File extensions to process" default:".jpeg,.jpg,.tiff,.png,.heic"`
 	Simulation       bool               `short:"s" long:"simulation" description:"Simulation mode"`
 	Csv              string             `short:"c" long:"csv" description:"CSV file name for actions output"`
 	MaxConcurrentOps uint               `short:"n" long:"concurrent" description:"Maximum number of concurrent operations" default:"100"`

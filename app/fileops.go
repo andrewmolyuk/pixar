@@ -6,7 +6,7 @@ import (
 	"github.com/andrewmolyuk/pixar"
 	"github.com/andrewmolyuk/pixar/log"
 	"github.com/andrewmolyuk/pixar/semaphore"
-	"github.com/rwcarlsen/goexif/exif"
+	"github.com/evanoberholster/imagemeta"
 	"io"
 	"os"
 	"path/filepath"
@@ -115,17 +115,22 @@ func getFileExifCreateDate(file string) time.Time {
 		return time.Time{}
 	}
 
-	exifData, err := exif.Decode(f)
+	meta, err := imagemeta.Parse(f)
 	if err != nil {
 		return time.Time{}
 	}
 
-	createDate, err := exifData.DateTime()
+	exif, err := meta.Exif()
+	if err != nil || exif == nil {
+		return time.Time{}
+	}
+
+	createdDate, err := exif.DateTime(time.Local)
 	if err != nil {
 		return time.Time{}
 	}
 
-	return createDate
+	return createdDate
 }
 
 func writeActionsToCsv(file string, actions []pixar.FileAction) error {
