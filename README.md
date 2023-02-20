@@ -1,12 +1,19 @@
 # pixar
 
 [![GitHub Actions](https://github.com/andrewmolyuk/pixar/actions/workflows/ci.yml/badge.svg)](https://github.com/andrewmolyuk/pixar/actions/workflows/ci.yml)
+[![Go Report Badge](https://goreportcard.com/badge/github.com/andrewmolyuk/pixar)](https://goreportcard.com/report/github.com/andrewmolyuk/pixar)
 [![Codacy Grade Badge](https://app.codacy.com/project/badge/Grade/a2731a9c8e33458baea3e9ad9c362d8c)](https://www.codacy.com/gh/andrewmolyuk/pixar/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=andrewmolyuk/pixar&amp;utm_campaign=Badge_Grade)
 [![Codacy Coverage Badge](https://app.codacy.com/project/badge/Coverage/a2731a9c8e33458baea3e9ad9c362d8c)](https://www.codacy.com/gh/andrewmolyuk/pixar/dashboard?utm_source=github.com&utm_medium=referral&utm_content=andrewmolyuk/pixar&utm_campaign=Badge_Coverage)
 [![GitHub release](https://img.shields.io/github/v/release/andrewmolyuk/pixar)](https://github.com/andrewmolyuk/pixar/releases)
+[![License Badge](https://img.shields.io/github/license/andrewmolyuk/pixar)](https://opensource.org/licenses/MIT)
 
-Pixar is a pics archiver written for my personal needs. I use it to archive my photos to an external drive and to the
-cloud.
+## Description
+
+Pixar is a command line tool to organize photos and videos according to their EXIF information. It's written in Go and
+can be run on Mac, Linux or Windows.
+
+The main idea is to copy or move photos and videos to structured folders according embedded EXIF information. The
+application is lossless, so it doesn't modify the original files.
 
 ## Features
 
@@ -36,9 +43,9 @@ Any useful idea or suggestion is welcomed.
 
 ## Installation
 
-Download the latest binary archive suitable to your operating system
-from [GitHub releases](https://github.com/andrewmolyuk/pixar/releases/latest). Extract the archive to any preferable
-place, and you are ready to run the binary.
+The easiest way to install Pixar is to download the binary from
+the [releases page](https://github.com/andrewmolyuk/pixar/releases/latest). Extract the binary from the archive and run
+it from the command line.
 
 For more comfortable usage you can move binary to `/usr/local/bin` on your MacOS or `/usr/bin` on your Linux system.
 For Windows, you can move it to `C:\Program Files\Pixar` and add the folder to the `%PATH%` environment variable.
@@ -143,7 +150,9 @@ installing Staticcheck is by running:
 ```shell
 brew install staticcheck
 ```
-or 
+
+or
+
 ```shell
 go install honnef.co/go/tools/cmd/staticcheck@latest
 ```
