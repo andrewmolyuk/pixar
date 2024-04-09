@@ -11,13 +11,13 @@ jobs:
 
     steps:
       - name: set up go 1.18
-        uses: actions/setup-go@v1
+        uses: actions/setup-go@v5
         with:
           go-version: 1.18
         id: go
 
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: build and test
         run: |
@@ -28,6 +28,3 @@ jobs:
         run: bash <(curl -Ls https://coverage.codacy.com/get.sh) report --force-coverage-parser go -r .coverage.out
         env:
           CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
-
-
-
