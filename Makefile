@@ -29,6 +29,11 @@ sim:
 run:
 	rm -Rf ./testdata/output && go run ./cmd/main.go --debug --input ./testdata/input --output ./testdata/output
 
+update:
+	go get -u ./...
+	go mod tidy
+.PHONY: update
+
 .NOTPARALLEL:
 
 .PHONY: all gocyclo golangci-lint staticcheck tidy fmt lint test run debug build
