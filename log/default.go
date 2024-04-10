@@ -2,11 +2,12 @@ package log
 
 import (
 	"fmt"
-	"github.com/andrewmolyuk/pixar/exitor"
 	"runtime"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/andrewmolyuk/pixar/exitor"
 )
 
 // Ensure defaultLogger implements ILog interface

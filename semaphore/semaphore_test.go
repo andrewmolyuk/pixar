@@ -1,38 +1,39 @@
 package semaphore_test
 
 import (
-	"github.com/andrewmolyuk/pixar/semaphore"
-	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
+
+	"github.com/andrewmolyuk/pixar/semaphore"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewSemaphore(t *testing.T) {
-	//Act
+	// Act
 	s := semaphore.NewSemaphore(5)
 
-	//Assert
+	// Assert
 	assert.NotNil(t, s, "Semaphore should not be nil")
 	assert.Equal(t, 5, s.Limit(), "Semaphore limit should be 5")
 }
 
 func TestSemaphore_Add(t *testing.T) {
-	//Arrange
+	// Arrange
 	s := semaphore.NewSemaphore(3)
 
-	//Act
+	// Act
 	s.Acquire()
 
-	//Assert
+	// Assert
 	assert.Equal(t, 1, s.Count(), "Semaphore count should be 1")
 	assert.Equal(t, 3, s.Limit(), "Semaphore limit should be 3")
 }
 
 func TestSemaphore_Add_Failed(t *testing.T) {
-	//Arrange
+	// Arrange
 	s := semaphore.NewSemaphore(1)
 
-	//Act
+	// Act
 	s.Acquire()
 	go func() {
 		time.Sleep(time.Nanosecond)
@@ -40,31 +41,31 @@ func TestSemaphore_Add_Failed(t *testing.T) {
 	}()
 	s.Acquire()
 
-	//Assert
+	// Assert
 	assert.Equal(t, 1, s.Count(), "Semaphore count should be 1")
 }
 
 func TestSemaphore_Done(t *testing.T) {
-	//Arrange
+	// Arrange
 	s := semaphore.NewSemaphore(1)
 	s.Acquire()
 
-	//Act
+	// Act
 	s.Release()
 
-	//Assert
+	// Assert
 	assert.Equal(t, 0, s.Count(), "Semaphore count should be 0")
 }
 
 func TestSemaphore_Wait(t *testing.T) {
-	//Arrange
+	// Arrange
 	s := semaphore.NewSemaphore(1)
 
-	//Act
+	// Act
 	s.Acquire()
 	s.Release()
 	s.Wait()
 
-	//Assert
+	// Assert
 	assert.Equal(t, 0, s.Count(), "Semaphore count should be 0")
 }

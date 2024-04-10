@@ -1,13 +1,14 @@
 package log_test
 
 import (
+	"io"
+	"os"
+	"testing"
+
 	"github.com/andrewmolyuk/pixar/exitor"
 	"github.com/andrewmolyuk/pixar/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"io"
-	"os"
-	"testing"
 )
 
 // Ensure exitorMock implements IExitor interface
@@ -67,7 +68,7 @@ func TestLogger_Debug_WithDebug(t *testing.T) {
 
 	// Assert
 	output := releaseStdOut(stdout, r, w)
-	assert.Equal(t, " [DEBUG] (default_test.go:66) test\x1b[0m\n", output[23:], "logger should print debug message")
+	assert.Equal(t, " [DEBUG] (default_test.go:67) test\x1b[0m\n", output[23:], "logger should print debug message")
 }
 
 func TestLogger_Debug_WithoutDebug(t *testing.T) {
@@ -148,7 +149,7 @@ func TestDefaultLogger_Debug(t *testing.T) {
 
 	// Assert
 	output := releaseStdOut(stdout, r, w)
-	assert.Equal(t, " [DEBUG] (default_test.go:147) test\n", output[23:], "logger should print debug message")
+	assert.Equal(t, " [DEBUG] (default_test.go:148) test\n", output[23:], "logger should print debug message")
 }
 
 func TestDefaultLogger_Info(t *testing.T) {

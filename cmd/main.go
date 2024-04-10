@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/andrewmolyuk/pixar"
 	"github.com/andrewmolyuk/pixar/app"
 	"github.com/andrewmolyuk/pixar/exitor"
 	"github.com/andrewmolyuk/pixar/log"
 	"github.com/jessevdk/go-flags"
-	"os"
 )
 
 var (

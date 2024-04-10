@@ -1,13 +1,14 @@
 package app
 
 import (
-	"github.com/andrewmolyuk/pixar"
-	"github.com/andrewmolyuk/pixar/log"
-	"github.com/andrewmolyuk/pixar/semaphore"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/andrewmolyuk/pixar"
+	"github.com/andrewmolyuk/pixar/log"
+	"github.com/andrewmolyuk/pixar/semaphore"
 )
 
 // Pixar contains command line parameters and operating data
@@ -68,7 +69,7 @@ func (p *Pixar) processFolder(folder string) {
 }
 
 func (p *Pixar) defineFileAction(file string) {
-	var zeroTime = time.Time{}
+	zeroTime := time.Time{}
 	log.Debug("Processing file: \"%s\"", file)
 	action := pixar.FileAction{
 		File: file,

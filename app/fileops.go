@@ -3,14 +3,15 @@ package app
 import (
 	"encoding/csv"
 	"fmt"
-	"github.com/andrewmolyuk/pixar"
-	"github.com/andrewmolyuk/pixar/log"
-	"github.com/andrewmolyuk/pixar/semaphore"
-	"github.com/evanoberholster/imagemeta"
 	"io"
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/andrewmolyuk/pixar"
+	"github.com/andrewmolyuk/pixar/log"
+	"github.com/andrewmolyuk/pixar/semaphore"
+	"github.com/evanoberholster/imagemeta"
 )
 
 func moveFile(file string, folder string, s *semaphore.Semaphore) {
@@ -79,7 +80,7 @@ func closeFile(file io.Closer) {
 
 func createFolder(folder string) {
 	log.Debug("Creating folder: \"%s\"", folder)
-	err := os.MkdirAll(folder, 0755)
+	err := os.MkdirAll(folder, 0o755)
 	if err != nil {
 		log.Error("Error creating folder: %s. Error:", folder, err)
 	}
@@ -134,7 +135,7 @@ func getFileExifCreateDate(file string) time.Time {
 }
 
 func writeActionsToCsv(file string, actions []pixar.FileAction) error {
-	var zeroTime = time.Time{}
+	zeroTime := time.Time{}
 	log.Debug("Writing actions to CSV file: \"%s\"", file)
 
 	createFolder(filepath.Dir(file))
