@@ -174,6 +174,14 @@ Gocyclo calculates cyclomatic complexities of functions in Go source code.
 go install github.com/fzipp/gocyclo/cmd/gocyclo@latest
 ```
 
+#### markdownlint
+
+We are using markdownlint to lint all markdown files in the project.
+
+```shell
+brew install markdownlint-cli
+```
+
 ### Commands
 
 #### make lint
