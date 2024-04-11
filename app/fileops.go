@@ -116,22 +116,12 @@ func getFileExifCreateDate(file string) time.Time {
 		return time.Time{}
 	}
 
-	meta, err := imagemeta.Parse(f)
-	if err != nil || meta == nil {
-		return time.Time{}
-	}
-
-	exif, err := meta.Exif()
-	if err != nil || exif == nil {
-		return time.Time{}
-	}
-
-	createdDate, err := exif.DateTime(time.Local)
+	exif, err := imagemeta.Decode(f)
 	if err != nil {
 		return time.Time{}
 	}
 
-	return createdDate
+	return exif.CreateDate()
 }
 
 func writeActionsToCsv(file string, actions []pixar.FileAction) error {

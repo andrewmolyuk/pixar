@@ -29,7 +29,7 @@ sim:
 run:
 	rm -Rf ./testdata/output && go run ./cmd/main.go --debug --input ./testdata/input --output ./testdata/output
 
-update:
+upgrade:
 	go get -u ./...
 	go mod tidy
 .PHONY: update
