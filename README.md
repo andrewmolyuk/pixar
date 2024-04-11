@@ -124,9 +124,10 @@ Limit of actions amount to perform at the same time. Default value is `100`.
 
 #### -p, --policy
 
-Define policy for duplicates: skip, folder. Default value is `skip`. When folder policy is set, the application will
-copy or move duplicates into separate folder named `Duplicates` under `output` folder with all `input` folders structure
-where the duplicate was found. In order if file already exists in duplication folder the application is failed.
+This option defines the policy for handling duplicates: `skip` or `folder`. The default value is `skip`. If the `folder`
+policy is selected, the application will copy or move duplicate files into a separate `Duplicates` folder located within
+the `output` folder, maintaining the original `input` folder structure. If a duplicate file already exists in the
+`Duplicates` folder, the application will terminate with an error.
 
 ## Examples
 
@@ -140,12 +141,29 @@ rm -Rf ./testdata/output && go pixar --debug --input ./testdata/input --output .
 
 ## Development
 
+To contribute to the development of this project, follow the steps below:
+
+1. Fork the repository and clone it to your local machine
+2. Navigate to your local repo and create a new branch
+3. Make your changes or additions to the code
+4. Push your changes to your fork
+5. Submit a pull request detailing the changes you made
+
+Before submitting your pull request, please ensure your code adheres to the following guidelines:
+
+- Code must be properly formatted and linted.
+- Include comments for complex sections of code.
+- Write tests for new features or bug fixes.
+- Update the README.md file if necessary.
+
+Your pull request will be reviewed by the maintainers and merged if it meets the standards of the project.
+
 ### Prerequisites
 
 #### Staticcheck
 
-Staticcheck is a state-of-the-art linter for the Go programming language. Beginning with Go 1.17, the simplest way of
-installing Staticcheck is by running:
+Staticcheck is a cutting-edge linter for the Go programming language. Starting from Go 1.17, the easiest method to
+install Staticcheck is by executing the following commands:
 
 ```shell
 brew install staticcheck
@@ -159,7 +177,9 @@ go install honnef.co/go/tools/cmd/staticcheck@latest
 
 #### golangci-lint
 
-Golangci-lint is a Go linters aggregator. You can install a binary release on macOS using brew:
+Golangci-lint is an aggregator of linters for Go programming language. It simplifies the process of using multiple
+linters and provides a unified output. For macOS users, a binary release can be installed using the brew package
+manager:
 
 ```shell
 brew install golangci-lint
@@ -168,7 +188,9 @@ brew upgrade golangci-lint
 
 #### gocyclo
 
-Gocyclo calculates cyclomatic complexities of functions in Go source code.
+Gocyclo is a tool that calculates the cyclomatic complexities of functions within Go source code. This complexity is a
+quantitative measure of the number of linearly independent paths through a program's source code. It is a useful metric
+for understanding the complexity and maintainability of a particular function.
 
 ```shell
 go install github.com/fzipp/gocyclo/cmd/gocyclo@latest
@@ -176,7 +198,7 @@ go install github.com/fzipp/gocyclo/cmd/gocyclo@latest
 
 #### markdownlint
 
-We are using markdownlint to lint all markdown files in the project.
+We are using markdownlint to lint all markdown files in the project. You can install it using brew:
 
 ```shell
 brew install markdownlint-cli
@@ -186,20 +208,48 @@ brew install markdownlint-cli
 
 #### make lint
 
-Run both linters, prune any no-longer-needed dependencies from `go.mod` and perform internal code formatter.
+This command run all the linters, including Staticcheck and Golangci-lint, to catch any potential issues in the code
+that could lead to bugs or make the code harder to read and maintain.
+
+In addition to linting, this command will also prune any dependencies from `go.mod` that are no longer needed. This is
+an important step in managing the project's dependencies, as it helps to keep the project clean, reduces the size of the
+project, and can even improve the build time and runtime efficiency.
+
+Lastly, this command will run the internal code formatter. Code formatting is a critical aspect of any project as it
+ensures that all the code in the project follows a consistent style.
+
+In addition, this command is used to execute the application in simulation mode using files from the testdata folder.
+The simulation mode allows you to run the application without performing any actual actions, which is particularly
+useful for testing and debugging. It enables you to observe the application's behavior and identify any potential issues
+or anomalies in its operation without affecting any real data. It's recommended to use this command during the
+development process to ensure that the application behaves as expected in different scenarios.
+
+In summary, the `make lint` command is a comprehensive tool for maintaining the quality, efficiency, and readability of
+the project's code.
 
 #### make test
 
-Run all tests in the project and print the results to the console.
+Run all tests in the project and print the results to the console. This command is crucial for ensuring the stability
+and reliability of the codebase. It executes all unit tests and integration tests, providing a comprehensive overview of
+the project's health. If any test fails, the command will return an error, making it easy to spot and fix issues early
+in the development process.
 
 #### make build
 
-Generate binary file suitable for the local OS.
+This command is used to compile the source code of the project into an executable binary file. The `make build` command
+will also ensure that all dependencies are correctly linked and that the resulting binary is optimized for the local
+operating system. This command is particularly useful when you're ready to test your application locally or prepare it
+for distribution. It's recommended to run this command after making any changes to the source code to ensure that the
+latest version of the application is always available for testing or deployment.
 
 #### make dev
 
-Execute the application with files from the `testdata` folder.
+This command is used to execute the application using files from the `testdata` folder. This can help to identify any
+issues or bugs in the application before it's used with real data. It's recommended to use this command during the
+development process to ensure that the application behaves as expected.
 
-#### make sim
+## License
 
-Execute the application in simulation mode with files from the `testdata` folder.
+This project is licensed under the terms of the MIT license. The MIT license is a permissive free software license that
+allows for reuse within proprietary software provided that all copies of the licensed software include a copy of the MIT
+License terms and the copyright notice. For more details, see the `LICENSE` file in the project root.
