@@ -2,8 +2,8 @@
 
 [![GitHub Actions](https://github.com/andrewmolyuk/pixar/actions/workflows/ci.yml/badge.svg)](https://github.com/andrewmolyuk/pixar/actions/workflows/ci.yml)
 [![Go Report Badge](https://goreportcard.com/badge/github.com/andrewmolyuk/pixar)](https://goreportcard.com/report/github.com/andrewmolyuk/pixar)
-[![Codacy Grade Badge](https://app.codacy.com/project/badge/Grade/a2731a9c8e33458baea3e9ad9c362d8c)](https://www.codacy.com/gh/andrewmolyuk/pixar/dashboard?utm_source=github.com&utm_medium=referral&utm_content=andrewmolyuk/pixar&utm_campaign=Badge_Grade)
-[![Codacy Coverage Badge](https://app.codacy.com/project/badge/Coverage/a2731a9c8e33458baea3e9ad9c362d8c)](https://www.codacy.com/gh/andrewmolyuk/pixar/dashboard?utm_source=github.com&utm_medium=referral&utm_content=andrewmolyuk/pixar&utm_campaign=Badge_Coverage)
+[![Codacy Grade Badge](https://app.codacy.com/project/badge/Grade/a2731a9c8e33458baea3e9ad9c362d8c)](https://app.codacy.com/gh/andrewmolyuk/pixar/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/a2731a9c8e33458baea3e9ad9c362d8c)](https://app.codacy.com/gh/andrewmolyuk/pixar/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
 [![GitHub release](https://img.shields.io/github/v/release/andrewmolyuk/pixar)](https://github.com/andrewmolyuk/pixar/releases)
 [![License Badge](https://img.shields.io/github/license/andrewmolyuk/pixar)](https://opensource.org/licenses/MIT)
 
