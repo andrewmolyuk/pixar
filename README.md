@@ -2,7 +2,7 @@
 
 [![GitHub Actions](https://github.com/andrewmolyuk/pixar/actions/workflows/ci.yml/badge.svg)](https://github.com/andrewmolyuk/pixar/actions/workflows/ci.yml)
 [![Go Report Badge](https://goreportcard.com/badge/github.com/andrewmolyuk/pixar)](https://goreportcard.com/report/github.com/andrewmolyuk/pixar)
-[![Codacy Grade Badge](https://app.codacy.com/project/badge/Grade/a2731a9c8e33458baea3e9ad9c362d8c)](https://www.codacy.com/gh/andrewmolyuk/pixar/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=andrewmolyuk/pixar&amp;utm_campaign=Badge_Grade)
+[![Codacy Grade Badge](https://app.codacy.com/project/badge/Grade/a2731a9c8e33458baea3e9ad9c362d8c)](https://www.codacy.com/gh/andrewmolyuk/pixar/dashboard?utm_source=github.com&utm_medium=referral&utm_content=andrewmolyuk/pixar&utm_campaign=Badge_Grade)
 [![Codacy Coverage Badge](https://app.codacy.com/project/badge/Coverage/a2731a9c8e33458baea3e9ad9c362d8c)](https://www.codacy.com/gh/andrewmolyuk/pixar/dashboard?utm_source=github.com&utm_medium=referral&utm_content=andrewmolyuk/pixar&utm_campaign=Badge_Coverage)
 [![GitHub release](https://img.shields.io/github/v/release/andrewmolyuk/pixar)](https://github.com/andrewmolyuk/pixar/releases)
 [![License Badge](https://img.shields.io/github/license/andrewmolyuk/pixar)](https://opensource.org/licenses/MIT)
@@ -66,19 +66,19 @@ pixar [OPTIONS]
 Scan folders and move photos and videos into folders according to their EXIF information
 
 Application Options:
-  -i, --input=      Input folder (default: .)
-  -o, --output=     Output folder (default: output)
-  -m, --move        Move files instead of copying them
-  -d, --debug       Debug mode
-  -v, --version     Show Pixar version info
-  -e, --extensions= File extensions to process (default: .jpeg,.jpg,.tiff,.png)
-  -s, --simulation  Simulation mode
-  -c, --csv=        CSV file name for actions output
-  -n, --concurrent= Maximum number of concurrent operations (default: 100)
-  -p, --policy=     Policy for duplicates: skip, folder (default: skip)
+-i, --input= Input folder (default: .)
+-o, --output= Output folder (default: output)
+-m, --move Move files instead of copying them
+-d, --debug Debug mode
+-v, --version Show Pixar version info
+-e, --extensions= File extensions to process (default: .jpeg,.jpg,.tiff,.png)
+-s, --simulation Simulation mode
+-c, --csv= CSV file name for actions output
+-n, --concurrent= Maximum number of concurrent operations (default: 100)
+-p, --policy= Policy for duplicates: skip, folder (default: skip)
 
 Help Options:
-  -h, --help     Show this help message
+-h, --help Show this help message
 ```
 
 ### Options
@@ -188,6 +188,10 @@ Run all tests in the project and print the results to the console.
 
 Generate binary file suitable for the local OS.
 
-#### make run
+#### make dev
 
-Execute the application with files from the `testdata` folder. 
+Execute the application with files from the `testdata` folder.
+
+#### make sim
+
+Execute the application in simulation mode with files from the `testdata` folder.
