@@ -12,7 +12,7 @@ lint:
 
 test: lint
 	go test ./... -cover
-	// Simulate a run
+	# Simulate a run
 	rm -Rf ./testdata/output && go run ./cmd/main.go --input ./testdata/input --output ./testdata/output --policy folder -s	
 .PHONY: test
 
