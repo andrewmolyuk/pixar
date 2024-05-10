@@ -2,6 +2,10 @@
 .NOTPARALLEL:
 .SILENT:
 
+VERSION := 0.1
+BUILD := $(shell expr $(shell git describe --tag | (cut -d'.' -f3) | (cut -d'-' -f1)) + 1)
+RELEASE := v$(VERSION).$(BUILD)
+
 lint: 
 	gocyclo -over 15 .
 	golangci-lint run ./...
@@ -29,3 +33,7 @@ upgrade:
 	go mod tidy
 .PHONY: update
 
+release: build
+	gh release create $(RELEASE) --title 'Release $(RELEASE)' --notes-file release/$(RELEASE).md
+	git fetch --tags
+.PHONY: release
