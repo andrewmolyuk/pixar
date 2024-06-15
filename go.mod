@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/evanoberholster/imagemeta v0.3.1
-	github.com/jessevdk/go-flags v1.5.0
+	github.com/jessevdk/go-flags v1.6.1
 	github.com/stretchr/testify v1.8.1
 )
 
